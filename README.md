@@ -31,13 +31,13 @@
 <tr>
 <td width="50%">
 
-### 📤 一键导入
+###  一键导入
 - 拖拽上传 Apple Health `export.zip`
 - 流式解析百万级 XML Record（支持 500MB+ 文件）
 - 实时进度追踪 + 处理阶段可视化
 - 内置示例数据，无需上传即可体验
 
-### 📊 健康仪表盘
+###  健康仪表盘
 - Bento-Grid 布局概览页
 - 40+ 健康指标可视化（日/周/月粒度）
 - 三色活动环（Move / Exercise / Stand）
@@ -47,13 +47,13 @@
 </td>
 <td width="50%">
 
-### 🤖 AI 智能分析
+###  AI 智能分析
 - 周报/月报自动生成（含核心指标变化 + 状态分布）
 - DeepSeek 驱动多轮健康对话
 - RAG 知识库增强（运动医学 + 健康指标参考）
 - 健康状态自动分类（高压疲劳 / 高效恢复 / 运动爆发 / 平稳日常）
 
-### 🛡️ 数据隐私
+###  数据隐私
 - 所有数据存储在本地 PostgreSQL
 - AI 仅接收脱敏后的聚合指标文本
 - 原始健康记录不离开服务器
@@ -95,6 +95,178 @@ cd frontend && npm install && npm run dev
 ```
 
 打开 **http://localhost:3000** 即可使用。
+
+---
+
+## 云端部署
+
+推荐使用 Docker Compose 一键部署到云服务器（1 核 2G 即可运行）。
+
+### 1. 服务器准备
+
+```bash
+# 安装 Docker
+curl -fsSL https://get.docker.com | sh
+
+# 克隆项目
+git clone https://github.com/ChuanBai728/Apple-Health-Plus.git
+cd Apple-Health-Plus
+```
+
+### 2. 配置密钥
+
+```bash
+# 创建环境变量文件
+cat > .env << 'EOF'
+DB_PASSWORD=your-secure-password
+DEEPSEEK_API_KEY=sk-your-api-key
+EOF
+```
+
+### 3. 创建 docker-compose.yml
+
+```bash
+cat > docker-compose.yml << 'EOF'
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: healthplus
+      POSTGRES_USER: healthplus
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes: [pgdata:/var/lib/postgresql/data]
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_PASSWORD: ${DB_PASSWORD}
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+    depends_on: [postgres, rabbitmq, redis]
+
+  frontend:
+    build: frontend/
+    restart: unless-stopped
+    depends_on: [backend]
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports: ["80:80"]
+    volumes: ["./nginx.conf:/etc/nginx/nginx.conf:ro"]
+    depends_on: [frontend, backend]
+
+volumes: [pgdata]
+EOF
+```
+
+### 4. 创建 Dockerfile 和 Nginx 配置
+
+```bash
+# Spring Boot 多模块 Dockerfile
+cat > Dockerfile << 'EOF'
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml settings.xml ./
+COPY shared-*/pom.xml ./
+RUN for d in shared-*; do mkdir -p $d && cp pom.xml $d/; done; mkdir -p backend-api
+COPY backend-api/pom.xml backend-api/
+COPY settings.xml /root/.m2/settings.xml
+RUN mvn -pl backend-api -am dependency:go-offline -B || true
+COPY . .
+RUN mvn package -pl backend-api -am -DskipTests -B && mv backend-api/target/backend-api-*.jar app.jar
+FROM eclipse-temurin:21-jre-alpine
+COPY --from=build /app/app.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","app.jar"]
+EOF
+
+# Nginx 反向代理
+cat > nginx.conf << 'EOF'
+events { worker_connections 1024; }
+http {
+    client_max_body_size 500M;
+    server {
+        listen 80;
+        location /api/ { proxy_pass http://backend:8080; proxy_read_timeout 300s; }
+        location / { proxy_pass http://frontend:3000; }
+    }
+}
+EOF
+
+# 前端 Dockerfile
+cat > frontend/Dockerfile << 'EOF'
+FROM node:22-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+FROM node:22-alpine
+WORKDIR /app
+COPY --from=build /app/.next .next/
+COPY --from=build /app/package.json .
+COPY --from=build /app/node_modules node_modules/
+EXPOSE 3000
+CMD ["npx","next","start"]
+EOF
+```
+
+### 5. Maven 国内镜像（可选，国内服务器加速）
+
+```bash
+cat > settings.xml << 'EOF'
+<settings>
+  <mirrors>
+    <mirror>
+      <id>aliyun</id>
+      <url>https://maven.aliyun.com/repository/public</url>
+      <mirrorOf>central</mirrorOf>
+    </mirror>
+  </mirrors>
+</settings>
+EOF
+```
+
+### 6. 配置生产环境
+
+```bash
+cat > backend-api/src/main/resources/application-prod.yml << 'EOF'
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/healthplus
+    username: healthplus
+    password: ${DB_PASSWORD}
+  rabbitmq: { host: rabbitmq }
+  data.redis: { host: redis }
+  ai.openai:
+    api-key: ${DEEPSEEK_API_KEY}
+    base-url: https://api.deepseek.com
+    chat.options.model: deepseek-chat
+EOF
+```
+
+### 7. 启动
+
+```bash
+docker compose up -d --build
+```
+
+部署完成后，打开 `http://<服务器公网IP>` 即可访问。
+
+> **注意**：国内服务器首次构建需要在 Docker 和 Maven 中配置代理或镜像源。若构建失败，参考 [Maven 阿里云镜像](https://developer.aliyun.com/mvn/guide) 和 [Docker 镜像加速](https://www.runoob.com/docker/docker-mirror-acceleration.html)。
 
 ---
 
@@ -198,15 +370,6 @@ export.zip → parse-worker → health_records (COPY 批量写入)
 
 ---
 
-## 文档
-
-- [技术架构文档](docs/architecture.md) — 完整技术细节与选型论证
-- [后端本地运行说明](docs/Backend_Dev_Runbook_CN.md)
-- [产品需求文档 (PRD)](docs/PRD_Web_App_CN.md)
-- [技术方案设计](docs/Technical_Design_Web_App_CN.md)
-
----
-
 ## License
 
-MIT · 仅供个人健康数据管理与分析使用，不构成医疗诊断建议。
+仅供个人健康数据管理与分析使用，不构成医疗诊断建议。

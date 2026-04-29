@@ -28,6 +28,3 @@ local-storage/
 postgres_data/
 minio_data/
 
-# Claude Code plugins
-.superpowers/
-skill/
