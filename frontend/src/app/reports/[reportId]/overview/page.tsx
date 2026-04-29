@@ -21,7 +21,7 @@ function hlNums(text: string) {
 /* ── Left Report Panel ───────────────────────────── */
 function ReportPanel({ insight, insightType, setInsightType }: any) {
   return (
-    <div className="sticky top-14 bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 space-y-6" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
+    <div className="h-full bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 space-y-6 overflow-y-auto">
       <div className="flex items-center justify-between">
         <span className="text-sm font-bold text-slate-900">健康报告</span>
         <div className="flex gap-1 bg-slate-100 rounded-lg p-0.5">
@@ -58,7 +58,7 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
 /* ── Right Chat Panel ────────────────────────────── */
 function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
   return (
-    <div className="sticky top-14 bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col" style={{height:'calc(100vh - 80px)'}}>
+    <div className="h-full bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100 text-sm font-bold text-slate-900 shrink-0">AI 对话</div>
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
         {chatMsgs.length===0&&(
@@ -366,9 +366,9 @@ export default function OverviewPage() {
   if(!data) return <div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-[#007AFF] border-t-transparent rounded-full"/></div>;
 
   return (
-    <div className="w-full max-w-[1920px] mx-auto px-6 flex gap-5 py-4" style={{minHeight:'calc(100vh - 48px)'}}>
-      <div className="w-[320px] 2xl:w-[400px] shrink-0"><ReportPanel insight={insight} insightType={insightType} setInsightType={setInsightType} /></div>
-      <div className="flex-1 min-w-0 space-y-5 overflow-y-auto">
+    <div className="w-full max-w-[1920px] mx-auto px-6 flex gap-5 py-4 h-[calc(100vh-48px)]">
+      <div className="w-[320px] 2xl:w-[400px] shrink-0 h-full"><ReportPanel insight={insight} insightType={insightType} setInsightType={setInsightType} /></div>
+      <div className="flex-1 min-w-0 space-y-5 overflow-y-auto h-full">
         {/* ── Top bar ── */}
         <div className="flex items-center gap-3">
           <Link href="/" className="text-xs font-medium text-[#007AFF] hover:underline transition-colors">← 首页</Link>
@@ -425,7 +425,7 @@ export default function OverviewPage() {
         )}
       </div>
       </div>
-      <div className="w-[320px] 2xl:w-[380px] shrink-0"><ChatPanel chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} sendMsg={sendMsg} /></div>
+      <div className="w-[320px] 2xl:w-[380px] shrink-0 h-full"><ChatPanel chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} sendMsg={sendMsg} /></div>
     </div>
   );
 }
