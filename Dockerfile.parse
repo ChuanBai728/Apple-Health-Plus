@@ -18,7 +18,7 @@ RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,pars
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/parse-worker/target/*.jar app.jar
+COPY --from=build /app/parse-worker/target/parse-worker-*.jar app.jar
 ENTRYPOINT ["java", \
   "-Djdk.xml.maxGeneralEntitySizeLimit=0", \
   "-Djdk.xml.totalEntitySizeLimit=0", \

@@ -18,5 +18,5 @@ RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,aggr
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/aggregation-worker/target/*.jar app.jar
+COPY --from=build /app/aggregation-worker/target/aggregation-worker-*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]

@@ -18,6 +18,6 @@ RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,back
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/backend-api/target/*.jar app.jar
+COPY --from=build /app/backend-api/target/backend-api-*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
