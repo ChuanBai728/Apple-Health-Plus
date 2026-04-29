@@ -185,19 +185,6 @@ export.zip → parse-worker → health_records (COPY 批量写入)
 
 ---
 
-## 端口映射
-
-| 服务 | 开发端口 | 说明 |
-|------|---------|------|
-| 前端 (Next.js) | `3000` | Web UI |
-| backend-api | `8080` | REST API |
-| PostgreSQL | `15432` | 数据库（避免与本地 PG 冲突） |
-| RabbitMQ | `5672` / `15672` | AMQP / Management UI |
-| Redis | `6379` | 缓存 |
-| MinIO | `9000` / `9001` | S3 API / Console |
-
----
-
 ## License
 
 仅供个人健康数据管理与分析使用，不构成医疗诊断建议。
