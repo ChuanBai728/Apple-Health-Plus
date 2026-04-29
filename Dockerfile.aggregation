@@ -7,6 +7,7 @@ COPY shared-ai/pom.xml shared-ai/
 COPY shared-storage/pom.xml shared-storage/
 COPY aggregation-worker/pom.xml aggregation-worker/
 COPY settings.xml /root/.m2/settings.xml
+RUN sed -i '/<module>backend-api<\/module>/d; /<module>parse-worker<\/module>/d' pom.xml
 RUN mvn -pl shared-domain,shared-messaging,shared-ai,shared-storage,aggregation-worker dependency:go-offline -B || true
 COPY shared-domain/src shared-domain/src/
 COPY shared-messaging/src shared-messaging/src/
