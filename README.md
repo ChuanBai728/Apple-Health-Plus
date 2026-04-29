@@ -75,23 +75,28 @@
 
 ### 启动步骤
 
+**一键启动（推荐）：**
+
+```powershell
+# Windows PowerShell
+.\start.ps1
+```
+
+自动拉起 Docker 基础设施 → 3 个后端服务 → 前端 → 打开浏览器。
+
+**手动启动：**
+
 ```bash
-# 1. 启动基础设施（PostgreSQL + RabbitMQ + Redis + MinIO）
+# 1. 基础设施
 docker compose -f docker-compose.dev.yml up -d
 
-# 2. 启动后端服务（3 个终端窗口）
-
-# 终端 1 — REST API (端口 8080)
+# 2. 后端（3 个终端）
 mvn -pl backend-api spring-boot:run -Dspring-boot.run.profiles=dev
-
-# 终端 2 — 解析 Worker
 mvn -pl parse-worker spring-boot:run -Dspring-boot.run.profiles=dev \
   -Dspring-boot.run.jvmArguments="-Djdk.xml.maxGeneralEntitySizeLimit=0 -Djdk.xml.totalEntitySizeLimit=0 -Djdk.xml.entityExpansionLimit=0"
-
-# 终端 3 — 聚合 Worker
 mvn -pl aggregation-worker spring-boot:run -Dspring-boot.run.profiles=dev
 
-# 3. 启动前端 (端口 3000)
+# 3. 前端
 cd frontend && npm install && npm run dev
 ```
 
