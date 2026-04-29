@@ -11,10 +11,17 @@ type TimeRange = 'all' | 'year' | 'month' | 'week';
 /* ── Side Panel ──────────────────────────────────── */
 const SEC_RE = /^(整体评估|关键发现|风险提示|可执行建议|核心指标|健康总结)/;
 
+/* ── Number highlighter ──────────────────────────── */
+function hlNums(text: string) {
+  const re = /(\d+\.?\d*\s*(?:bpm|ms|步|kcal|kg|h|min|%|km)|[+-]\d+\.?\d*%|\d+\.?\d*\s*[上下]降)/g;
+  const parts = text.split(re); const matches = text.match(re)||[];
+  return parts.map((p,i)=>i===0?<span key={i}>{p}</span>:<span key={i}>{matches[i-1]?<mark className="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-medium text-[11px]">{matches[i-1]}</mark>:null}{p}</span>);
+}
+
 /* ── Left Report Panel ───────────────────────────── */
 function ReportPanel({ insight, insightType, setInsightType }: any) {
   return (
-    <div className="sticky top-14 bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 space-y-4" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
+    <div className="sticky top-14 bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-6 space-y-6" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
       <div className="flex items-center justify-between">
         <span className="text-sm font-bold text-slate-900">健康报告</span>
         <div className="flex gap-1 bg-slate-100 rounded-lg p-0.5">
@@ -32,13 +39,15 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
             <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${h.changePct>0?'bg-emerald-100/50 text-emerald-700':'bg-rose-100/50 text-rose-700'}`}>{h.trend}{Math.abs(h.changePct).toFixed(0)}%</span>
           </div>
         ))}</div>
-        <div className="border-b border-slate-100" />
-        <div className="text-xs text-slate-600 leading-loose whitespace-pre-line">
+        <div className="border-t border-slate-100" />
+        <div className="text-xs text-slate-600 leading-relaxed space-y-5">
           {insight.aiNarrative.split('\n').map((line:string,i:number)=>{
             const t=line.trim();
-            if(!t) return <div key={i} className="h-2"/>;
-            if(SEC_RE.test(t)) return <div key={i} className="text-sm font-bold text-slate-900 mt-4 mb-2">{t}</div>;
-            return <p key={i} className="mb-1">{t}</p>;
+            if(!t) return <div key={i} />;
+            if(SEC_RE.test(t)) return <div key={i} className="border-t border-slate-100 pt-5 -mt-1 first:border-t-0 first:pt-4">
+              <div className="text-sm font-bold text-slate-900 mb-3">{t}</div>
+            </div>;
+            return <p key={i} className="leading-loose">{hlNums(t)}</p>;
           })}
         </div>
       </>}
