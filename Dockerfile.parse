@@ -7,13 +7,13 @@ COPY shared-ai/pom.xml shared-ai/
 COPY shared-storage/pom.xml shared-storage/
 COPY parse-worker/pom.xml parse-worker/
 COPY settings.xml /root/.m2/settings.xml
-RUN mvn -pl parse-worker -am dependency:go-offline -B || true
+RUN mvn -pl shared-domain,shared-messaging,shared-ai,shared-storage,parse-worker dependency:go-offline -B || true
 COPY shared-domain/src shared-domain/src/
 COPY shared-messaging/src shared-messaging/src/
 COPY shared-ai/src shared-ai/src/
 COPY shared-storage/src shared-storage/src/
 COPY parse-worker/src parse-worker/src/
-RUN mvn package -pl parse-worker -am -DskipTests -B
+RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,parse-worker -DskipTests -B
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
