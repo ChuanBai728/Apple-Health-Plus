@@ -24,6 +24,10 @@ local-storage/
 /tmp/
 *.log
 
+# Claude Code (local only)
+CLAUDE.md
+.claude/
+
 # Docker
 postgres_data/
 minio_data/
