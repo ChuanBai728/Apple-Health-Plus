@@ -261,9 +261,105 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 
 ---
 
-## 七、基础设施
+## 七、安全认证体系
 
-### 7.1 Docker Compose
+### 7.1 Spring Security + JWT
+
+**认证流程**：
+```
+客户端 POST /api/v1/auth/login {username, password}
+       ↓
+   AuthService 验证 BCrypt 密码
+       ↓
+   JwtTokenProvider 签发 JWT（含 userId, username, role）
+       ↓
+   客户端存储 Token，后续请求带 Authorization: Bearer <token>
+       ↓
+   JwtAuthenticationFilter 解析 Claims → 注入 SecurityContext
+       ↓
+   @PreAuthorize 方法级权限校验
+```
+
+**白名单端点**（无需认证）：
+- `POST /api/v1/auth/**` — 注册/登录
+- `POST /api/v1/uploads` — 文件上传（multipart）
+- `POST /api/v1/demo` — 示例数据
+- `GET /actuator/health` — 健康检查
+
+**异常处理**：
+- Token 过期 → `401 {"error":"Token expired"}`
+- Token 非法 → `401 {"error":"Invalid token"}`
+- 权限不足 → `403 {"error":"Access denied"}`
+
+**技术细节**：
+- JWT 签名：HMAC-SHA256（`jjwt-api 0.12.6`）
+- 密码加密：BCrypt（`PasswordEncoder`）
+- 会话策略：`SessionCreationPolicy.STATELESS`（无状态）
+- 配置键：`app.jwt.secret` / `app.jwt.expiration-ms`（默认 24h）
+
+---
+
+## 八、Redis 缓存层
+
+### 8.1 Spring Cache 抽象
+
+使用 `@EnableCaching` + `RedisCacheManager` 实现声明式缓存。
+
+**差异化 TTL 配置**：
+
+| 缓存名 | TTL | 应用于 | 策略 |
+|--------|-----|--------|------|
+| `insight` | 24h | 健康周报/月报 | `sync=true` 防击穿 |
+| `metrics` | 10min | 指标查询 | `unless = "#result == null"` 防穿透 |
+| `overview` | 5min | 概览仪表盘 | 上传完成时全部清除 |
+
+**缓存失效**：
+- 新文件上传完成 → `@CacheEvict(allEntries = true)` 清除所有缓存
+- 序列化：`GenericJackson2JsonRedisSerializer` + `JavaTimeModule`
+
+### 8.2 高并发防护
+
+- **缓存穿透**：`disableCachingNullValues()` + 空结果不入缓存
+- **缓存击穿**：`@Cacheable(sync = true)` 对热点 key 加分布式锁
+- **缓存雪崩**：差异化 TTL 避免同时过期
+
+---
+
+## 九、XML 解析引擎（高吞吐管线）
+
+### 9.1 Producer-Consumer 架构
+
+```
+[StAX Producer] ──put(阻塞)──▶ [RecordRingBuffer 20K] ──poll──▶ [4 VirtualThread Consumers]
+  1 platform thread               ArrayBlockingQueue              轻量虚拟线程池
+                                                                      │
+                                                         ┌────────────┘
+                                                         ▼
+                                               [PgCopyBatchInserter]
+                                          COPY FROM STDIN / 10K条 / 500ms
+```
+
+### 9.2 核心类
+
+| 类 | 职责 |
+|----|------|
+| `RecordRingBuffer` | 有界阻塞队列（`ArrayBlockingQueue<RawRecord>`），背压控制 |
+| `XmlRecordProducer` | StAX 流式扫描 `<Record>`，提取原始属性，投递到缓冲区 |
+| `VirtualThreadConsumer` | 虚拟线程池消费，重量级业务处理（反序列化/时区/单位清洗） |
+| `PgCopyBatchInserter` | PostgreSQL COPY 协议批量写入，写入前删索引，写完后异步重建 |
+| `HighThroughputParsePipeline` | 编排器：启动 Producer → 等待 Consumer → Graceful Shutdown |
+
+### 9.3 性能特征
+
+- **背压**：Producer 在 `buffer.put()` 阻塞，防止 OOM
+- **动态批处理**：10000 条 或 500ms 双重阈值触发 flush
+- **优雅停机**：Producer 完成后排空 buffer → 关闭 Consumer → flush 残余 → 重建索引
+
+---
+
+## 十、基础设施
+
+### 10.1 Docker Compose
 
 所有基础设施（PostgreSQL, RabbitMQ, Redis, MinIO）通过 `docker-compose.dev.yml` 一键启动，开发环境完全容器化。
 
@@ -276,7 +372,7 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 | Redis | 6379 | 6379 |
 | MinIO | 9000 / 9001 | 9000 / 9001 |
 
-### 7.2 本地存储策略
+### 10.2 本地存储策略
 
 - `shared-storage` 模块抽象存储接口，通过 `StorageService` 接口解耦
 - 开发环境：`LocalStorageService` 写入 `local-storage/` 目录
@@ -285,7 +381,7 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 
 ---
 
-## 八、关键设计决策
+## 十一、关键设计决策
 
 | 决策 | 选择 | 理由 |
 |------|------|------|
@@ -299,7 +395,7 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 
 ---
 
-## 九、部署指南
+## 十二、部署指南
 
 ### 开发环境启动
 
