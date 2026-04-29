@@ -5,6 +5,7 @@ import app.healthplus.messaging.ParseJobMessage;
 import app.healthplus.parser.config.QueueNames;
 import app.healthplus.parser.core.AppleHealthParser;
 import app.healthplus.parser.core.AppleHealthZipReader;
+import app.healthplus.parser.core.HighThroughputParsePipeline;
 import app.healthplus.parser.core.ParsedHealthRecord;
 import app.healthplus.storage.StorageService;
 import java.io.InputStream;
@@ -129,6 +130,49 @@ public class ParsePipelineService {
                 }
             });
             recordCount.set(count);
+        }
+    }
+
+    /**
+     * High-throughput pipeline using Producer-Consumer pattern with virtual threads,
+     * bounded ring buffer, and PostgreSQL COPY batch insertion.
+     * <p>
+     * Architecture:
+     *   1 Platform Thread (StAX Producer) → RingBuffer (20K) → 4 Virtual Thread Consumers
+     *   → PgCopyBatchInserter (10K records or 500ms per batch, COPY protocol)
+     */
+    public void processHighThroughput(ParseJobMessage message) throws Exception {
+        markParsing(message.uploadId());
+        try {
+            UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000001");
+
+            long total;
+            try (InputStream zipStream = storageService.load(message.storageKey())) {
+                AppleHealthZipReader.HealthXmlResult result = zipReader.openHealthXmlSinglePass(zipStream);
+                HighThroughputParsePipeline pipeline = new HighThroughputParsePipeline(
+                        dataSource, userId, message.uploadId());
+                total = pipeline.execute(result.inputStream());
+            }
+
+            // Update upload metadata
+            jdbcTemplate.update(
+                    "UPDATE uploads SET status = 'PARSED', record_count = ?, " +
+                    "source_count = (SELECT count(DISTINCT source_name) FROM health_records WHERE upload_id = ?), " +
+                    "coverage_start_at = (SELECT min(start_at) FROM health_records WHERE upload_id = ?), " +
+                    "coverage_end_at = (SELECT max(end_at) FROM health_records WHERE upload_id = ?), " +
+                    "finished_at = ? WHERE id = ?",
+                    total, message.uploadId(), message.uploadId(), message.uploadId(),
+                    Timestamp.from(Instant.now()), message.uploadId());
+
+            // Send aggregate job
+            String msgId = UUID.randomUUID().toString();
+            rabbitTemplate.convertAndSend(
+                    QueueNames.AGGREGATE_QUEUE,
+                    new AggregateJobMessage(message.uploadId(), userId, msgId, "parse-worker", Instant.now()));
+
+        } catch (Exception e) {
+            markFailed(message.uploadId(), e.getMessage());
+            throw e;
         }
     }
 }
