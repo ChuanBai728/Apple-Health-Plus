@@ -1,0 +1,88 @@
+<h2>概览仪表盘 Hero 卡片 — 修订</h2>
+<p class="subtitle">步数从圆环中取出，活动环保持简洁三色</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">之前：步数在圆环内</div>
+    <div class="mockup-body" style="background:linear-gradient(145deg,#1C1C1E,#2C2C2E,#1C1C1E);border-radius:24px;padding:20px;color:#fff">
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px">
+        <div style="position:relative;width:88px;height:88px">
+          <svg viewBox="0 0 88 88" style="transform:rotate(-90deg)"><circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/><circle cx="44" cy="44" r="34" fill="none" stroke="#FF3B30" stroke-width="10" stroke-dasharray="145 68" stroke-linecap="round"/><circle cx="44" cy="44" r="23" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/><circle cx="44" cy="44" r="23" fill="none" stroke="#34C759" stroke-width="10" stroke-dasharray="92 52" stroke-linecap="round"/><circle cx="44" cy="44" r="12" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="10"/><circle cx="44" cy="44" r="12" fill="none" stroke="#007AFF" stroke-width="10" stroke-dasharray="40 35" stroke-linecap="round"/></svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column">
+            <div style="font-size:18px;font-weight:700">8,542</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.5)">步</div>
+          </div>
+        </div>
+        <div style="font-size:11px;line-height:1.8;color:rgba(255,255,255,0.6)">
+          <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#FF3B30;margin-right:4px"></span>活动 680/800 kcal</div>
+          <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#34C759;margin-right:4px"></span>锻炼 45/30 min</div>
+          <div><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#007AFF;margin-right:4px"></span>站立 10/12 h</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:#FF3B30;text-align:center;margin-top:4px">❌ 步数挤在圆环里，难以辨识</div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">修订：步数移到圆环上方</div>
+    <div class="mockup-body" style="background:linear-gradient(145deg,#1C1C1E,#2C2C2E,#1C1C1E);border-radius:24px;padding:20px;color:#fff;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(255,59,48,0.10),transparent 70%)"></div>
+      <div style="position:relative;z-index:1">
+        <!-- Step count: large, prominent, outside ring -->
+        <div style="text-align:center;margin-bottom:12px">
+          <div style="font-size:9px;font-weight:600;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px">今日步数</div>
+          <div style="font-size:36px;font-weight:700;letter-spacing:-1px">8,542</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.4)">步 · 目标 10,000</div>
+          <!-- Step progress bar -->
+          <div style="margin-top:6px;background:rgba(255,255,255,0.1);border-radius:6px;height:4px;overflow:hidden">
+            <div style="background:linear-gradient(90deg,#FF9500,#FF3B30);height:100%;width:85%;border-radius:6px"></div>
+          </div>
+        </div>
+        <!-- Activity Ring: clean, no text inside -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:20px">
+          <div style="position:relative;width:72px;height:72px">
+            <svg viewBox="0 0 88 88" style="transform:rotate(-90deg)">
+              <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#FF3B30" stroke-width="9" stroke-dasharray="145 68" stroke-linecap="round"/>
+              <circle cx="44" cy="44" r="23" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"/>
+              <circle cx="44" cy="44" r="23" fill="none" stroke="#34C759" stroke-width="9" stroke-dasharray="92 52" stroke-linecap="round"/>
+              <circle cx="44" cy="44" r="12" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="9"/>
+              <circle cx="44" cy="44" r="12" fill="none" stroke="#007AFF" stroke-width="9" stroke-dasharray="40 35" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div style="font-size:10px;line-height:2;color:rgba(255,255,255,0.55)">
+            <div><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#FF3B30;margin-right:4px"></span>活动 680 kcal</div>
+            <div><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#34C759;margin-right:4px"></span>锻炼 45 min</div>
+            <div><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#007AFF;margin-right:4px"></span>站立 10 h</div>
+          </div>
+        </div>
+        <!-- Vitals row unchanged -->
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">静息心率</div>
+            <div style="font-size:20px;font-weight:700">62<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.3)"> bpm</span></div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">HRV</div>
+            <div style="font-size:20px;font-weight:700">48<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.3)"> ms</span></div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:14px;padding:10px;text-align:center">
+            <div style="font-size:9px;color:rgba(255,255,255,0.4)">睡眠</div>
+            <div style="font-size:20px;font-weight:700">7.5<span style="font-size:10px;font-weight:400;color:rgba(255,255,255,0.3)"> h</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>Hero 卡片修订重点</h3>
+  <ul>
+    <li><strong>步数独立展示</strong>：大号 36px 数字 + 进度条，一目了然</li>
+    <li><strong>活动环回归本质</strong>：纯三色环 (Move/Exercise/Stand)，无文字干扰</li>
+    <li><strong>底部三列式</strong>：心率 · HRV · 睡眠 并排显示，信息密度更高</li>
+  </ul>
+</div>
+
+<p class="subtitle">这个方案可以吗？</p>

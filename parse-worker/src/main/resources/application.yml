@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: parse-worker
+  main:
+    web-application-type: none
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:15432/healthplus?reWriteBatchedInserts=true}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME:healthplus}
+    password: ${DB_PASSWORD:healthplus}
+  jpa:
+    hibernate:
+      ddl-auto: none
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+app:
+  storage:
+    root: ${APP_STORAGE_ROOT:./local-storage}

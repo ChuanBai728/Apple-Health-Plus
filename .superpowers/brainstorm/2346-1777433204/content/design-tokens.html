@@ -1,0 +1,47 @@
+<h2>iOS 原生风格 — 设计基础</h2>
+<p class="subtitle">确认整体设计语言后再进入各页面细节</p>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">🎨 色彩系统 — 按健康类别</div>
+    <div class="mockup-body">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#FF3B30,#FF6B6B);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">活动</div>
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#FF9500,#FFB340);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">能量</div>
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#34C759,#66D98A);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">身体</div>
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#007AFF,#5856D6);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">睡眠</div>
+        <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#AF52DE,#CF7AFF);display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;font-weight:700">心智</div>
+      </div>
+      <p style="font-size:12px;color:#8E8E93">活动环三色 + 扩展类别色 = Apple Health 多彩体系</p>
+    </div>
+  </div>
+  <div class="mockup">
+    <div class="mockup-header">🪟 卡片与背景</div>
+    <div class="mockup-body">
+      <div style="background:#F2F2F7;border-radius:20px;padding:16px">
+        <div style="background:rgba(255,255,255,0.72);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:16px;padding:14px;margin-bottom:8px;box-shadow:0 2px 12px rgba(0,0,0,0.04)">
+          <span style="font-size:13px;font-weight:600;color:#1C1C1E">毛玻璃卡片</span>
+          <p style="font-size:11px;color:#8E8E93;margin-top:2px">backdrop-blur-xl + bg-white/70</p>
+        </div>
+        <div style="background:#FFFFFF;border-radius:16px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+          <span style="font-size:13px;font-weight:600;color:#1C1C1E">纯白卡片</span>
+          <p style="font-size:11px;color:#8E8E93;margin-top:2px">用于数据密集区域（图表、列表）</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h3>设计 Token 摘要</h3>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+    <tr style="border-bottom:1px solid #E5E5EA"><td style="padding:8px 0;color:#8E8E93">背景色</td><td style="padding:8px 0;font-weight:500">#F2F2F7 (iOS systemGroupedBackground)</td></tr>
+    <tr style="border-bottom:1px solid #E5E5EA"><td style="padding:8px 0;color:#8E8E93">卡片色</td><td style="padding:8px 0;font-weight:500">rgba(255,255,255,0.72) + blur(20px)</td></tr>
+    <tr style="border-bottom:1px solid #E5E5EA"><td style="padding:8px 0;color:#8E8E93">圆角</td><td style="padding:8px 0;font-weight:500">16px (卡片) / 20px (模态) / 28px (Hero)</td></tr>
+    <tr style="border-bottom:1px solid #E5E5EA"><td style="padding:8px 0;color:#8E8E93">文字色</td><td style="padding:8px 0;font-weight:500">#1C1C1E (标题) / #8E8E93 (辅助)</td></tr>
+    <tr style="border-bottom:1px solid #E5E5EA"><td style="padding:8px 0;color:#8E8E93">阴影</td><td style="padding:8px 0;font-weight:500">微妙投影 (0 2px 12px rgba(0,0,0,0.04))</td></tr>
+    <tr><td style="padding:8px 0;color:#8E8E93">字体</td><td style="padding:8px 0;font-weight:500">SF Pro (system-ui) — 大标题 34px/700 — 正文 15px/400</td></tr>
+  </table>
+</div>
+
+<p class="subtitle">以上是设计基础。确认方向无误后，我们逐页设计。终端回复 "继续" 即可。</p>

@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:15432/healthplus
+    driver-class-name: org.postgresql.Driver
+    username: healthplus
+    password: healthplus
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379
+app:
+  storage:
+    root: ../local-storage
+    type: local
+    s3:
+      endpoint: http://localhost:9000
+      region: us-east-1
+      access-key: minioadmin
+      secret-key: minioadmin
+      bucket: healthplus

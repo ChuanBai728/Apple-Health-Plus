@@ -1,0 +1,17 @@
+spring:
+  main:
+    web-application-type: none
+  datasource:
+    url: jdbc:postgresql://localhost:15432/healthplus
+    driver-class-name: org.postgresql.Driver
+    username: healthplus
+    password: healthplus
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379

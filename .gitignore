@@ -1,0 +1,29 @@
+# Java / Maven
+**/target/
+.idea/
+*.iml
+.mvn/
+
+# Node.js
+node_modules/
+frontend/.next/
+frontend/out/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# Local runtime
+local-storage/
+.runtime-logs/
+/tmp/
+*.log
+
+# Docker
+postgres_data/
+minio_data/
