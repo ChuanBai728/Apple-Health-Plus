@@ -1,0 +1,24 @@
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+COPY shared-domain/pom.xml shared-domain/
+COPY shared-messaging/pom.xml shared-messaging/
+COPY shared-ai/pom.xml shared-ai/
+COPY shared-storage/pom.xml shared-storage/
+COPY parse-worker/pom.xml parse-worker/
+RUN mvn -pl parse-worker dependency:go-offline -B -q || true
+COPY shared-domain/src shared-domain/src/
+COPY shared-messaging/src shared-messaging/src/
+COPY shared-ai/src shared-ai/src/
+COPY shared-storage/src shared-storage/src/
+COPY parse-worker/src parse-worker/src/
+RUN mvn -pl parse-worker package -DskipTests -B -q
+
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/parse-worker/target/*.jar app.jar
+ENTRYPOINT ["java", \
+  "-Djdk.xml.maxGeneralEntitySizeLimit=0", \
+  "-Djdk.xml.totalEntitySizeLimit=0", \
+  "-Djdk.xml.entityExpansionLimit=0", \
+  "-jar", "app.jar"]
