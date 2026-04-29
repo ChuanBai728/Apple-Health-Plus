@@ -34,36 +34,36 @@ function MetricContent() {
   return (
     <div className="space-y-6">
       <button onClick={() => router.push(`/reports/${reportId}/overview`)}
-        className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 text-sm font-medium">← 返回概览</button>
+        className="inline-flex items-center gap-1 text-[#007AFF] hover:underline text-sm font-medium">← 返回概览</button>
 
       {/* Health Reference Card */}
       {ref && (
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 p-5">
+        <div className="bg-gradient-to-br from-[#007AFF]/5 to-[#5856D6]/5 rounded-2xl border border-[#007AFF]/10 p-5">
           <h3 className="font-bold text-blue-900 mb-2">📖 关于{label}</h3>
           <p className="text-sm text-blue-800 leading-relaxed mb-2">{ref.description}</p>
           <div className="flex gap-4 text-xs mt-3">
             <div className="flex-1 bg-white/70 rounded-xl p-3">
               <span className="font-semibold text-emerald-700">健康范围</span>
-              <p className="text-gray-600 mt-0.5 leading-relaxed">{ref.healthyRange}</p>
+              <p className="text-[#3A3A3C] mt-0.5 leading-relaxed">{ref.healthyRange}</p>
             </div>
             <div className="flex-1 bg-white/70 rounded-xl p-3">
               <span className="font-semibold text-amber-700">健康建议</span>
-              <p className="text-gray-600 mt-0.5 leading-relaxed">{ref.advice}</p>
+              <p className="text-[#3A3A3C] mt-0.5 leading-relaxed">{ref.advice}</p>
             </div>
           </div>
         </div>
       )}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div><h2 className="text-3xl font-extrabold text-gray-900">{label}</h2><p className="text-gray-400 text-sm mt-0.5">{unit}</p></div>
+        <div><h2 className="text-3xl font-extrabold text-[#1C1C1E]">{label}</h2><p className="text-gray-400 text-sm mt-0.5">{unit}</p></div>
         <button onClick={() => router.push(`/reports/${reportId}/chat`)}
-          className="self-start px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-semibold shadow-lg">🤖 问 AI</button>
+          className="self-start px-5 py-2.5 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] text-sm font-semibold shadow-lg">🤖 问 AI</button>
       </div>
 
       <div className="flex gap-1.5 bg-gray-100 rounded-xl p-1 w-fit">
         {(['DAILY','WEEKLY','MONTHLY'] as const).map(g => (
           <button key={g} onClick={() => setGranularity(g)}
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${granularity===g?'bg-white text-gray-900 shadow-sm':'text-gray-500'}`}>
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${granularity===g?'bg-white text-[#1C1C1E] shadow-sm':'text-gray-500'}`}>
             {{DAILY:'日',WEEKLY:'周',MONTHLY:'月'}[g]}</button>
         ))}
       </div>
@@ -74,7 +74,7 @@ function MetricContent() {
         {COMPARE_OPTIONS.filter(m => m !== metricKey).map(m => <option key={m} value={m}>{METRIC_LABELS[m] || m}</option>)}
       </select>
 
-      {error && <div className="bg-red-50 rounded-xl p-4 text-red-600 text-sm">{error}</div>}
+      {error && <div className="bg-[#FF3B30]/5 rounded-2xl p-4 text-[#FF3B30] text-sm">{error}</div>}
       {data && <TrendChart data={data.points} label={data.label || label} />}
 
       {data && data.points.length > 0 && (
@@ -89,7 +89,7 @@ function MetricContent() {
             ].map((s,i) => (
               <div key={s.label} className={`bg-white rounded-xl border border-gray-200 border-l-4 ${STAT_COLORS[i]} p-4`}>
                 <div className="text-xs text-gray-400 uppercase">{s.label}</div>
-                <div className="text-2xl font-extrabold text-gray-900 mt-1">{s.value.toFixed(1)}</div>
+                <div className="text-2xl font-extrabold text-[#1C1C1E] mt-1">{s.value.toFixed(1)}</div>
                 <div className="text-xs text-gray-400 mt-0.5">{unit}</div>
               </div>
             ));

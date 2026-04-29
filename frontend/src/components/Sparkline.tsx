@@ -1,4 +1,4 @@
-export function Sparkline({ points, color = '#3b82f6', height = 32 }: { points: (number | null)[]; color?: string; height?: number }) {
+export function Sparkline({ points, color = '#8E8E93', height = 32 }: { points: (number | null)[]; color?: string; height?: number }) {
   const valid = points.filter((p): p is number => p != null);
   if (valid.length < 2) return <div style={{ height }} />;
 

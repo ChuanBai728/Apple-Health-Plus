@@ -39,14 +39,14 @@ export default function HeatmapPage() {
 
   return (
     <div className="space-y-6">
-      <button onClick={() => router.push(`/reports/${reportId}/overview`)} className="text-blue-600 hover:underline text-sm">← 返回概览</button>
+      <button onClick={() => router.push(`/reports/${reportId}/overview`)} className="text-[#007AFF] hover:underline text-sm">← 返回概览</button>
       <h2 className="text-2xl font-bold">🗓 活动热力图</h2>
 
       <div className="flex gap-2 flex-wrap">
         {METRICS.map(m => (
           <button key={m} onClick={() => setMetric(m)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              metric === m ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              metric === m ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-black/[0.04]'
             }`}>{METRIC_LABELS[m] || m}</button>
         ))}
       </div>
@@ -54,7 +54,7 @@ export default function HeatmapPage() {
       {loading ? (
         <div className="text-center py-12 text-gray-400">加载中...</div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(14px,1fr))] gap-[2px]">
             {data.map((d, i) => (
               <div key={i}
