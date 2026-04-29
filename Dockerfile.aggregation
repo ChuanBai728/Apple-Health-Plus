@@ -7,13 +7,13 @@ COPY shared-ai/pom.xml shared-ai/
 COPY shared-storage/pom.xml shared-storage/
 COPY aggregation-worker/pom.xml aggregation-worker/
 COPY settings.xml /root/.m2/settings.xml
-RUN mvn -pl aggregation-worker -am dependency:go-offline -B -q || true
+RUN mvn -pl aggregation-worker -am dependency:go-offline -B || true
 COPY shared-domain/src shared-domain/src/
 COPY shared-messaging/src shared-messaging/src/
 COPY shared-ai/src shared-ai/src/
 COPY shared-storage/src shared-storage/src/
 COPY aggregation-worker/src aggregation-worker/src/
-RUN mvn -pl aggregation-worker package -am -DskipTests -B -q
+RUN mvn package -pl aggregation-worker -am -DskipTests -B
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
