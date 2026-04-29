@@ -6,13 +6,6 @@ public record MetricSeriesResponse(
         String metricKey,
         String label,
         String granularity,
-        List<MetricPoint> points,
-        boolean anomaly,
-        Double baselineAvg30d,
-        Double trendDelta7d,
-        Double trendDelta30d
+        List<MetricPoint> points
 ) {
-    public MetricSeriesResponse(String metricKey, String label, String granularity, List<MetricPoint> points) {
-        this(metricKey, label, granularity, points, false, null, null, null);
-    }
 }

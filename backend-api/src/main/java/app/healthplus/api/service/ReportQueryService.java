@@ -210,8 +210,13 @@ public class ReportQueryService {
             if (row.get("trend_delta_30d") != null) delta30 = ((Number) row.get("trend_delta_30d")).doubleValue();
         }
 
-        return new MetricSeriesResponse(metricKey, toLabelStr(metricKey), granularity.name().toLowerCase(),
-                points, anomaly, baseline, delta7, delta30);
+        // Attach anomaly context to the last data point
+        if (!points.isEmpty() && anomaly) {
+            MetricPoint last = points.remove(points.size() - 1);
+            points.add(new MetricPoint(last.date(), last.value(), baseline, delta7, delta30, anomaly));
+        }
+
+        return new MetricSeriesResponse(metricKey, toLabelStr(metricKey), granularity.name().toLowerCase(), points);
     }
 
     private String toLabelStr(String metricKey) {
