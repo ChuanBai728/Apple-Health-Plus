@@ -69,165 +69,154 @@ export default function HomePage() {
     }
   };
 
+  const features = [
+    { icon: '📊', title: '自动解析', desc: '流式解析超大 XML，处理百万条健康记录', color: 'bg-[#007AFF]/5 ring-[#007AFF]/10' },
+    { icon: '📈', title: '趋势图表', desc: '心率、睡眠、步数等核心指标日/周/月趋势', color: 'bg-[#34C759]/5 ring-[#34C759]/10' },
+    { icon: '🤖', title: 'AI 深度对话', desc: '基于真实数据，DeepSeek 多轮分析健康状态', color: 'bg-[#5856D6]/5 ring-[#5856D6]/10' },
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F5F5F7] via-white to-[#F5F5F7]">
-    <div className="max-w-6xl mx-auto px-4">
-      {/* Hero */}
-      <div className="text-center space-y-6 pt-12 pb-4">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#007AFF]/8 text-[#007AFF] rounded-full text-sm font-medium ring-1 ring-[#007AFF]/10">
-          <span className="w-2 h-2 bg-[#007AFF] rounded-full animate-pulse" />
-          基于 DeepSeek AI 深度分析
-        </div>
-        <h1 className="text-5xl font-extrabold tracking-tight leading-tight">
-          <span className="bg-gradient-to-b from-slate-800 to-slate-500 bg-clip-text text-transparent">
-            Apple Health+
-          </span>
-          <br />
-          <span className="text-slate-700">苹果健康数据可视化与 AI 洞察</span>
-        </h1>
-        <p className="text-lg text-slate-500 max-w-xl mx-auto leading-relaxed tracking-wide">
-          上传 Apple Health 导出的 导出.zip，自动生成健康指标图表、趋势分析，与 AI 深度对话你的健康数据
-        </p>
-      </div>
+    <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
-      {/* Main content */}
-      <div className="space-y-8">
-          {/* How to Export Guide */}
-          <div className="max-w-lg mx-auto bg-white rounded-3xl p-6 ring-1 ring-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
-            <h3 className="text-sm font-semibold text-slate-700 mb-4">如何获取导出数据？</h3>
-            <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">1</div>
-              <p className="text-sm text-slate-600 pt-1">打开 iPhone 上的 <strong>“健康”</strong> App</p>
+        {/* ── Left Column: Brand + Features ── */}
+        <div className="lg:col-span-5 space-y-10">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#007AFF]/8 text-[#007AFF] rounded-full text-sm font-medium ring-1 ring-[#007AFF]/10">
+              <span className="w-2 h-2 bg-[#007AFF] rounded-full animate-pulse" />
+              基于 DeepSeek AI 深度分析
             </div>
-            <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">2</div>
-              <p className="text-sm text-slate-600 pt-1">点击右上角 <strong>头像</strong>（或个人资料图标）</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">3</div>
-              <p className="text-sm text-slate-600 pt-1">下滑到底部，点击 <strong>“导出所有健康数据”</strong></p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">4</div>
-              <p className="text-sm text-slate-600 pt-1">保存生成的 <code className="bg-slate-100 px-1.5 py-0.5 rounded-md text-slate-600 text-xs font-mono">导出.zip</code> 文件</p>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">5</div>
-              <p className="text-sm text-slate-600 pt-1">在此页面拖拽或选择该文件上传分析</p>
-            </div>
-            </div>
-          </div>
-
-          {/* Upload Zone */}
-          <div
-            onDrop={handleDrop}
-            onDragOver={(e) => e.preventDefault()}
-            className={`max-w-lg mx-auto rounded-3xl p-10 text-center transition-all duration-500 ${
-              uploading
-                ? 'bg-gradient-to-br from-[#F8F8FC] to-[#EEF0FF] ring-1 ring-[#007AFF]/20 shadow-lg'
-                : 'bg-white ring-1 ring-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-2 border-dashed border-slate-200 hover:border-slate-300 hover:bg-blue-50/30 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)]'
-            }`}
-          >
-        {uploading ? (
-          <div className="space-y-5">
-            <div className="w-16 h-16 mx-auto bg-[#007AFF]/10 rounded-3xl flex items-center justify-center text-3xl animate-pulse">
-              {phase === 'uploading' ? '📤' : '⏳'}
-            </div>
-            <p className="text-slate-800 font-semibold">
-              {phase === 'uploading'
-                ? `上传中 ${progress.percent}%`
-                : '正在提交任务...'}
+            <h1 className="text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+              <span className="bg-gradient-to-b from-slate-800 to-slate-500 bg-clip-text text-transparent">
+                Apple Health+
+              </span>
+              <br />
+              <span className="text-slate-700">苹果健康数据<br className="hidden sm:inline"/>可视化与 AI 洞察</span>
+            </h1>
+            <p className="text-lg text-slate-500 max-w-lg leading-relaxed tracking-wide">
+              上传 Apple Health 导出的 导出.zip，自动生成健康指标图表、趋势分析，与 AI 深度对话你的健康数据
             </p>
-            {phase === 'uploading' && (
-              <>
-                <p className="text-sm text-slate-500">
-                  {formatSize(progress.loaded)} / {formatSize(progress.total)}
-                </p>
-                <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-[#007AFF] transition-all duration-300"
-                    style={{ width: `${progress.percent}%` }}
-                  />
-                </div>
-              </>
-            )}
-            {phase === 'processing' && (
-              <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-                <div className="h-full w-full rounded-full bg-[#007AFF] animate-shimmer"
-                  style={{ backgroundSize: '200% 100%' }} />
-              </div>
-            )}
-          </div>
-        ) : !file ? (
-          <div className="space-y-5">
-            <div className="w-16 h-16 mx-auto bg-[#007AFF]/10 rounded-3xl flex items-center justify-center text-3xl">
-              📁
-            </div>
-            <div>
-              <p className="text-slate-700 font-semibold text-lg">拖拽 导出.zip 到此处</p>
-              <p className="text-sm text-slate-400 mt-1.5">或点击下方按钮选择文件</p>
-            </div>
-            <input ref={fileInput} type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
-            <button
-              onClick={() => fileInput.current?.click()}
-              className="px-8 py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 font-semibold shadow-[0_4px_14px_rgba(0,122,255,0.3)]"
-            >
-              选择文件
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-5">
-            <div className="w-16 h-16 mx-auto bg-[#34C759]/10 rounded-3xl flex items-center justify-center text-3xl">
-              ✅
-            </div>
-            <p className="text-slate-800 font-semibold truncate text-lg">{file.name}</p>
-            <p className="text-sm text-slate-500">{formatSize(file.size)}</p>
-            <button
-              onClick={handleUpload}
-              className="w-full py-3.5 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 text-lg font-bold shadow-[0_4px_14px_rgba(0,122,255,0.3)]"
-            >
-              开始分析
-            </button>
-            <button onClick={() => { setFile(null); setError(''); }} className="text-sm text-slate-400 hover:text-slate-600 transition-colors">
-              重新选择
-            </button>
-          </div>
-        )}
-        {error && (
-          <p className="mt-4 text-sm text-[#FF3B30] bg-[#FF3B30]/5 rounded-3xl px-4 py-3 ring-1 ring-[#FF3B30]/10">{error}</p>
-        )}
-      </div>
-
-          {/* Demo Preview */}
-          <div className="max-w-lg mx-auto text-center">
-            <div className="text-sm text-slate-400 mb-3">不想上传真实数据？试试示例</div>
-            <button
-              onClick={handleDemo}
-              disabled={uploading}
-              className="px-7 py-3 bg-white ring-1 ring-[#5856D6]/20 text-[#5856D6] rounded-full hover:bg-[#5856D6]/5 hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 transition-all duration-300 text-sm font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.06)]"
-            >
-              🚀 快速预览示例数据
-            </button>
           </div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-2xl mx-auto">
-            {[
-              { icon: '📊', title: '自动解析', desc: '流式解析超大 XML，处理百万条健康记录', color: 'bg-[#007AFF]/5 ring-[#007AFF]/10' },
-              { icon: '📈', title: '趋势图表', desc: '心率、睡眠、步数等核心指标日/周/月趋势', color: 'bg-[#34C759]/5 ring-[#34C759]/10' },
-              { icon: '🤖', title: 'AI 深度对话', desc: '基于真实数据，DeepSeek 多轮分析健康状态', color: 'bg-[#5856D6]/5 ring-[#5856D6]/10' },
-            ].map((f) => (
-              <div key={f.title} className={`${f.color} bg-white ring-1 rounded-3xl p-6 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] transition-all duration-300`}>
-                <div className="text-3xl mb-3">{f.icon}</div>
-                <h3 className="font-bold text-slate-800 text-base mb-1.5">{f.title}</h3>
-                <p className="text-sm text-slate-500 leading-relaxed">{f.desc}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {features.slice(0, 2).map((f) => (
+              <div key={f.title} className={`${f.color} bg-white ring-1 rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] transition-all duration-300`}>
+                <div className="text-2xl mb-2">{f.icon}</div>
+                <h3 className="font-bold text-slate-800 text-sm mb-1">{f.title}</h3>
+                <p className="text-xs text-slate-500 leading-relaxed">{f.desc}</p>
               </div>
             ))}
+            <div key={features[2].title} className={`sm:col-span-2 ${features[2].color} bg-white ring-1 rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 hover:shadow-[0_12px_40px_rgb(0,0,0,0.06)] transition-all duration-300`}>
+              <div className="text-2xl mb-2">{features[2].icon}</div>
+              <h3 className="font-bold text-slate-800 text-sm mb-1">{features[2].title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">{features[2].desc}</p>
+            </div>
           </div>
+        </div>
+
+        {/* ── Right Column: Action Zone ── */}
+        <div className="lg:col-span-7">
+          <div className="bg-white rounded-3xl ring-1 ring-black/5 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 lg:p-10 space-y-8">
+
+            {/* How to Export Guide */}
+            <div>
+              <h3 className="text-base font-semibold text-slate-800 mb-5">如何获取导出数据？</h3>
+              <div className="space-y-4">
+              {[
+                '打开 iPhone 上的 "健康" App',
+                '点击右上角 头像（或个人资料图标）',
+                '下滑到底部，点击 "导出所有健康数据"',
+                '保存生成的 导出.zip 文件',
+                '在此页面拖拽或选择该文件上传分析',
+              ].map((text, i) => (
+                <div key={i} className="flex items-start gap-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#007AFF]/10 rounded-full flex items-center justify-center text-[#007AFF] text-sm font-bold">{i + 1}</div>
+                  <p className="text-sm text-slate-600 pt-1">{text}</p>
+                </div>
+              ))}
+              </div>
+            </div>
+
+            <div className="border-t border-slate-100" />
+
+            {/* Upload Zone */}
+            <div
+              onDrop={handleDrop}
+              onDragOver={(e) => e.preventDefault()}
+              className={`rounded-2xl p-8 text-center transition-all duration-500 ${
+                uploading
+                  ? 'bg-gradient-to-br from-[#F8F8FC] to-[#EEF0FF] ring-1 ring-[#007AFF]/20'
+                  : 'bg-slate-50/50 border-2 border-dashed border-slate-200 hover:border-slate-300 hover:bg-blue-50/30'
+              }`}
+            >
+              {uploading ? (
+                <div className="space-y-4">
+                  <div className="w-14 h-14 mx-auto bg-[#007AFF]/10 rounded-2xl flex items-center justify-center text-2xl animate-pulse">
+                    {phase === 'uploading' ? '📤' : '⏳'}
+                  </div>
+                  <p className="text-slate-800 font-semibold">
+                    {phase === 'uploading' ? `上传中 ${progress.percent}%` : '正在提交任务...'}
+                  </p>
+                  {phase === 'uploading' && (
+                    <>
+                      <p className="text-sm text-slate-500">{formatSize(progress.loaded)} / {formatSize(progress.total)}</p>
+                      <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                        <div className="h-full rounded-full bg-[#007AFF] transition-all duration-300" style={{ width: `${progress.percent}%` }} />
+                      </div>
+                    </>
+                  )}
+                  {phase === 'processing' && (
+                    <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                      <div className="h-full w-full rounded-full bg-[#007AFF] animate-shimmer" style={{ backgroundSize: '200% 100%' }} />
+                    </div>
+                  )}
+                </div>
+              ) : !file ? (
+                <div className="space-y-4">
+                  <div className="w-14 h-14 mx-auto bg-[#007AFF]/10 rounded-2xl flex items-center justify-center text-2xl">📁</div>
+                  <div>
+                    <p className="text-slate-700 font-semibold text-lg">拖拽 导出.zip 到此处</p>
+                    <p className="text-sm text-slate-400 mt-1">或点击下方按钮选择文件</p>
+                  </div>
+                  <input ref={fileInput} type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
+                  <button onClick={() => fileInput.current?.click()}
+                    className="px-8 py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 font-semibold shadow-[0_4px_14px_rgba(0,122,255,0.3)]">
+                    选择文件
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="w-14 h-14 mx-auto bg-[#34C759]/10 rounded-2xl flex items-center justify-center text-2xl">✅</div>
+                  <p className="text-slate-800 font-semibold truncate text-lg">{file.name}</p>
+                  <p className="text-sm text-slate-500">{formatSize(file.size)}</p>
+                  <button onClick={handleUpload}
+                    className="w-full py-3.5 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] hover:-translate-y-0.5 hover:shadow-md transition-all duration-300 text-lg font-bold shadow-[0_4px_14px_rgba(0,122,255,0.3)]">
+                    开始分析
+                  </button>
+                  <button onClick={() => { setFile(null); setError(''); }} className="text-sm text-slate-400 hover:text-slate-600 transition-colors">重新选择</button>
+                </div>
+              )}
+              {error && (
+                <p className="mt-4 text-sm text-[#FF3B30] bg-[#FF3B30]/5 rounded-2xl px-4 py-3 ring-1 ring-[#FF3B30]/10">{error}</p>
+              )}
+            </div>
+
+            {/* Demo Preview */}
+            <div className="text-center pt-2">
+              <button onClick={handleDemo} disabled={uploading}
+                className="px-6 py-2.5 bg-white ring-1 ring-[#5856D6]/15 text-[#5856D6] rounded-full hover:bg-[#5856D6]/5 hover:-translate-y-0.5 hover:shadow-md disabled:opacity-40 transition-all duration-300 text-sm font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                🚀 快速预览示例数据
+              </button>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
-      <p className="text-center text-sm text-slate-400 max-w-md mx-auto pb-6 pt-10 tracking-wide">
+      <p className="text-center text-sm text-slate-400 max-w-md mx-auto mt-16 tracking-wide">
         你的健康数据仅用于本次分析，不会与第三方共享。本产品不提供医疗诊断，AI 分析仅供参考。
       </p>
     </div>
