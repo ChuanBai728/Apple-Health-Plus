@@ -6,6 +6,7 @@ COPY shared-messaging/pom.xml shared-messaging/
 COPY shared-ai/pom.xml shared-ai/
 COPY shared-storage/pom.xml shared-storage/
 COPY parse-worker/pom.xml parse-worker/
+COPY settings.xml /root/.m2/settings.xml
 RUN mvn -pl parse-worker dependency:go-offline -B -q || true
 COPY shared-domain/src shared-domain/src/
 COPY shared-messaging/src shared-messaging/src/

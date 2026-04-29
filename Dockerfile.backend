@@ -10,6 +10,9 @@ COPY shared-ai/pom.xml shared-ai/
 COPY shared-storage/pom.xml shared-storage/
 COPY backend-api/pom.xml backend-api/
 
+# Maven 阿里云镜像
+COPY settings.xml /root/.m2/settings.xml
+
 # 下载依赖（此层在 pom 不变时可缓存）
 RUN mvn -pl backend-api dependency:go-offline -B -q || true
 
