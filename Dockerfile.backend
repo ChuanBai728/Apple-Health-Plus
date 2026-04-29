@@ -14,7 +14,7 @@ COPY backend-api/pom.xml backend-api/
 COPY settings.xml /root/.m2/settings.xml
 
 # 下载依赖（此层在 pom 不变时可缓存）
-RUN mvn -pl backend-api dependency:go-offline -B -q || true
+RUN mvn -pl backend-api -am dependency:go-offline -B -q || true
 
 # Copy 源码
 COPY shared-domain/src shared-domain/src/
@@ -24,7 +24,7 @@ COPY shared-storage/src shared-storage/src/
 COPY backend-api/src backend-api/src/
 
 # 编译
-RUN mvn -pl backend-api package -DskipTests -B -q
+RUN mvn -pl backend-api package -am -DskipTests -B -q
 
 # ── Stage 2: Runtime ──
 FROM eclipse-temurin:21-jre-alpine
