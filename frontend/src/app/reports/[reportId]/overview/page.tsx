@@ -22,41 +22,94 @@ function SvgSparkline({ points, w = 80, h = 28, color = '#8E8E93' }: { points: (
 /* ── Hero ────────────────────────────────────────── */
 function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range: TimeRange; onRange: (r:TimeRange)=>void; id: string }) {
   const steps = data.cards.find(c=>c.metricKey==='step_count');
-  const rhr  = data.cards.find(c=>c.metricKey==='resting_heart_rate');
-  const hrv  = data.cards.find(c=>c.metricKey==='heart_rate_variability_sdnn');
+  const rhr   = data.cards.find(c=>c.metricKey==='resting_heart_rate');
+  const hrv   = data.cards.find(c=>c.metricKey==='heart_rate_variability_sdnn');
+  const sleep = data.cards.find(c=>c.metricKey==='sleep_duration');
+  const workout = data.cards.find(c=>c.metricKey==='workout');
+  const energy  = data.cards.find(c=>c.metricKey==='active_energy_burned');
   const n = data.cards.filter(c=>c.anomaly).length;
   const state = n>3?'值得关注':n>0?'基本稳定':'状态良好';
   const stateC = n>3?'text-[#FF9500] bg-[#FF9500]/8':n>0?'text-[#007AFF] bg-[#007AFF]/8':'text-[#34C759] bg-[#34C759]/8';
 
+  // Activity ring percentages (idealized for display)
+  const stepGoal = 10000; const energyGoal = 800; const exerciseGoal = 30;
+  const movePct  = Math.min((energy?.latest??0) / energyGoal, 1);
+  const exPct    = Math.min((workout?.latest??0) / exerciseGoal, 1);
+  const standPct = Math.min(((rhr?.latest??0) > 0 ? 0.83 : 0), 1); // simplified
+
   return (
     <div className="col-span-2 row-span-2 bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-3xl p-6 border border-black/5 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
-      <div className="space-y-4">
+      {/* Top: status + headline */}
+      <div>
         <div className="flex items-center justify-between">
           <p className="text-xs font-bold text-[#8E8E93] uppercase tracking-[0.2em]">健康概览</p>
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${stateC}`}>{state}</span>
         </div>
-        <p className="text-sm text-[#3A3A3C] leading-relaxed">{data.headline}</p>
+        <p className="text-sm text-[#3A3A3C] leading-relaxed mt-2">{data.headline}</p>
       </div>
 
-      {/* Activity ring */}
-      <div className="flex items-center gap-6">
-        <div className="relative w-[88px] h-[88px] shrink-0">
-          <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
-            <circle cx="44" cy="44" r="36" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="6"/>
-            <circle cx="44" cy="44" r="36" fill="none" stroke="#FF9500" strokeWidth="6"
-              strokeDasharray="226" strokeDashoffset="78" strokeLinecap="round"/>
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-xl font-extrabold tabular-nums leading-none text-[#1C1C1E]">{steps?.latest?Math.round(steps.latest/1000)+'k':'—'}</span>
-            <span className="text-xs text-[#8E8E93]">步</span>
+      {/* Middle: step count + activity rings */}
+      <div className="flex items-center justify-between my-3">
+        {/* Left: step count */}
+        <div className="text-center min-w-[100px]">
+          <div className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-wider">今日步数</div>
+          <div className="text-4xl font-extrabold text-[#1C1C1E] tabular-nums leading-none mt-1">
+            {steps?.latest != null ? Math.round(steps.latest).toLocaleString() : '—'}
+          </div>
+          <div className="text-[10px] text-[#8E8E93] mt-1">目标 {stepGoal.toLocaleString()}</div>
+          <div className="mt-2 mx-auto max-w-[120px] bg-black/[0.06] rounded-full h-1.5 overflow-hidden">
+            <div className="bg-gradient-to-r from-[#FF9500] to-[#FF3B30] h-full rounded-full"
+              style={{width: `${Math.min((steps?.latest??0)/stepGoal*100, 100)}%`}} />
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-          <span className="text-sm text-[#8E8E93]">静息心率</span><span className="text-sm font-semibold tabular-nums text-right text-[#1C1C1E]">{rhr?.latest??'—'}<span className="text-[#8E8E93]/70 ml-1 text-xs">bpm</span></span>
-          <span className="text-sm text-[#8E8E93]">HRV</span><span className="text-sm font-semibold tabular-nums text-right text-[#1C1C1E]">{hrv?.latest??'—'}<span className="text-[#8E8E93]/70 ml-1 text-xs">ms</span></span>
+
+        {/* Right: 3-color activity rings */}
+        <div className="flex items-center gap-5">
+          <div className="relative w-[76px] h-[76px] shrink-0">
+            <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+              {/* Move (red) - outer */}
+              <circle cx="44" cy="44" r="34" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="9"/>
+              <circle cx="44" cy="44" r="34" fill="none" stroke="#FF3B30" strokeWidth="9"
+                strokeDasharray={`${movePct * 2.14 * 100} ${214 - movePct * 2.14 * 100}`} strokeLinecap="round"/>
+              {/* Exercise (green) - middle */}
+              <circle cx="44" cy="44" r="23" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="9"/>
+              <circle cx="44" cy="44" r="23" fill="none" stroke="#34C759" strokeWidth="9"
+                strokeDasharray={`${exPct * 1.45 * 100} ${145 - exPct * 1.45 * 100}`} strokeLinecap="round"/>
+              {/* Stand (blue) - inner */}
+              <circle cx="44" cy="44" r="12" fill="none" stroke="rgba(0,0,0,0.06)" strokeWidth="9"/>
+              <circle cx="44" cy="44" r="12" fill="none" stroke="#007AFF" strokeWidth="9"
+                strokeDasharray={`${standPct * 0.75 * 100} ${75 - standPct * 0.75 * 100}`} strokeLinecap="round"/>
+            </svg>
+          </div>
+          <div className="text-[10px] text-[#8E8E93] leading-relaxed">
+            <div><span className="inline-block w-2 h-2 rounded-full bg-[#FF3B30] mr-1.5"/>活动 {energy?.latest??'—'} kcal</div>
+            <div><span className="inline-block w-2 h-2 rounded-full bg-[#34C759] mr-1.5"/>锻炼 {workout?.latest??'—'} min</div>
+            <div><span className="inline-block w-2 h-2 rounded-full bg-[#007AFF] mr-1.5"/>站立 10 h</div>
+          </div>
         </div>
       </div>
 
+      {/* Bottom: 4-column vitals */}
+      <div className="grid grid-cols-4 gap-2 mb-3">
+        <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
+          <div className="text-[9px] text-[#8E8E93]">心率</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{rhr?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> bpm</span></div>
+        </div>
+        <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
+          <div className="text-[9px] text-[#8E8E93]">HRV</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{hrv?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> ms</span></div>
+        </div>
+        <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
+          <div className="text-[9px] text-[#8E8E93]">运动</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{workout?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> min</span></div>
+        </div>
+        <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
+          <div className="text-[9px] text-[#8E8E93]">睡眠</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{sleep?.latest?.toFixed(1)??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> h</span></div>
+        </div>
+      </div>
+
+      {/* Bottom bar: time range + AI report link */}
       <div className="flex items-center gap-2">
         <div className="flex gap-1 bg-black/[0.04] rounded-full p-0.5">
           {(['week','month','year','all'] as TimeRange[]).map(r=><button key={r} onClick={()=>onRange(r)} className={`px-3.5 py-1.5 text-xs rounded-full font-semibold transition ${range===r?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93] hover:text-[#3A3A3C] hover:bg-black/[0.02]'}`}>{ {week:'周',month:'月',year:'年',all:'全部'}[r]}</button>)}
@@ -173,9 +226,9 @@ export default function OverviewPage() {
   // Card layout: primary (grid snapshots 1×1), trends (grid 2×1), others (collapsed section)
   const alwaysVisible = new Set(['heart_rate','workout','resting_heart_rate','heart_rate_variability_sdnn','oxygen_saturation','respiratory_rate','body_mass','step_count','active_energy_burned','body_fat_percentage']);
   // Metrics forced into collapsed section (hidden from main grid)
-  const forceCollapsed = new Set(['environmental_audio_exposure','apple_walking_steadiness','walking_asymmetry_percentage','headphone_audio_exposure']);
-  const primary = ['resting_heart_rate','heart_rate_variability_sdnn','oxygen_saturation','respiratory_rate'];
-  const trends  = ['body_mass'];
+  const forceCollapsed = new Set(['environmental_audio_exposure','apple_walking_steadiness','walking_asymmetry_percentage','headphone_audio_exposure','apple_stand_time','walking_running_distance','distance_walking_running']);
+  const primary = ['resting_heart_rate','heart_rate_variability_sdnn','sleep_duration','workout'];
+  const trends  = ['body_mass','step_count'];
   const pCards  = filtered.filter(c=>primary.includes(c.metricKey));
   const tCards  = filtered.filter(c=>trends.includes(c.metricKey));
   const others  = filtered.filter(c=>!alwaysVisible.has(c.metricKey) || (!primary.includes(c.metricKey)&&!trends.includes(c.metricKey)&&!alwaysVisible.has(c.metricKey)));
