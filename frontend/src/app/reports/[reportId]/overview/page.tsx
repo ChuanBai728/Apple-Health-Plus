@@ -40,12 +40,12 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
           </div>
         ))}</div>
         <div className="border-t border-slate-100" />
-        <div className="text-xs text-slate-600 leading-relaxed space-y-5">
+        <div className="text-base text-slate-600 leading-relaxed space-y-5">
           {insight.aiNarrative.split('\n').map((line:string,i:number)=>{
             const t=line.trim();
             if(!t) return <div key={i} />;
             if(SEC_RE.test(t)) return <div key={i} className="border-t border-slate-100 pt-5 -mt-1 first:border-t-0 first:pt-4">
-              <div className="text-sm font-bold text-slate-900 mb-3">{t}</div>
+              <div className="text-lg font-semibold text-slate-800 mb-3">{t}</div>
             </div>;
             return <p key={i} className="leading-loose">{hlNums(t)}</p>;
           })}
@@ -71,14 +71,14 @@ function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: 
             <div className="flex flex-wrap gap-2 justify-center">
               {['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(
                 <button key={q} onClick={()=>sendMsg(q)}
-                  className="px-4 py-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs text-slate-600 transition-colors">{q}</button>
+                  className="px-4 py-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-base text-slate-600 transition-colors">{q}</button>
               ))}
             </div>
           </div>
         )}
         {chatMsgs.map((m:any,i:number)=>(
           <div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}>
-            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-base leading-relaxed ${
               m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-slate-100 text-slate-700 rounded-bl-sm'
             }`}>{m.content}</div>
           </div>
@@ -91,7 +91,7 @@ function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: 
           <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)}
             onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)}
             placeholder="输入问题..." disabled={chatLoading}
-            className="flex-1 bg-transparent text-sm text-slate-700 placeholder-slate-400 focus:outline-none"/>
+            className="flex-1 bg-transparent text-base text-slate-700 placeholder-slate-400 focus:outline-none"/>
           <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()}
             className="w-8 h-8 flex items-center justify-center bg-[#007AFF] text-white rounded-full disabled:opacity-40 hover:bg-[#0077EE] transition-colors shrink-0">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -226,14 +226,14 @@ function SnapshotCard({ card, id }: { card: any; id: string }) {
       className="col-span-1 row-span-1 bg-white rounded-3xl border border-transparent p-5 hover:-translate-y-1 hover:shadow-lg hover:border-slate-200 transition-all duration-300 group flex flex-col justify-between min-h-[150px]">
       <div>
         <div className="flex items-start justify-between">
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.1em] leading-tight">{l}</p>
+          <p className="text-sm font-semibold text-slate-500 uppercase tracking-[0.1em] leading-tight">{l}</p>
           {card.anomaly && <span className="w-[6px] h-[6px] bg-[#FF9500] rounded-full shrink-0 mt-0.5"/>}
         </div>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[32px] font-extrabold text-slate-900 tabular-nums leading-none">
+          <span className="text-5xl font-bold text-slate-900 tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-xs text-slate-400 font-medium">{u}</span>
+          <span className="text-sm text-slate-500 font-medium">{u}</span>
         </div>
         {card.trend30d!=null && (
           <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${
@@ -262,12 +262,12 @@ function TrendCard({ card, id }: { card: any; id: string }) {
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
       className="col-span-2 row-span-1 bg-white rounded-3xl border border-transparent p-5 hover:-translate-y-1 hover:shadow-lg hover:border-slate-200 transition-all duration-300 flex items-center gap-6 min-h-[120px]">
       <div className="shrink-0 min-w-[140px]">
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.1em]">{l}</p>
+        <p className="text-sm font-semibold text-slate-500 uppercase tracking-[0.1em]">{l}</p>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[32px] font-extrabold text-slate-900 tabular-nums leading-none">
+          <span className="text-5xl font-bold text-slate-900 tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-xs text-slate-400 font-medium">{u}</span>
+          <span className="text-sm text-slate-500 font-medium">{u}</span>
         </div>
         {card.trend30d!=null&&<span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${
           tr.includes('emerald')?'bg-emerald-100/50 text-emerald-700':
