@@ -36,6 +36,27 @@ function MetricContent() {
       <button onClick={() => router.push(`/reports/${reportId}/overview`)}
         className="inline-flex items-center gap-1 text-[#007AFF] hover:underline text-sm font-medium">← 返回概览</button>
 
+      {/* Anomaly Alert */}
+      {data && data.anomaly && (
+        <div className="bg-[#FFFBF5] border border-[#FF9500]/20 rounded-2xl p-5 space-y-2">
+          <h3 className="text-sm font-bold text-[#FF9500]">⚠ 检测到异常波动</h3>
+          <p className="text-sm text-[#3A3A3C] leading-relaxed">
+            该指标最新值{data.points.length > 0 && data.points[data.points.length-1].value != null ? '为 ' + data.points[data.points.length-1].value!.toFixed(1) + (unit || '') : ''}
+            {data.baselineAvg30d != null ? '，显著偏离 30 天基线 ' + data.baselineAvg30d.toFixed(1) + (unit || '') : ''}（超过 2.5 倍标准差）。
+          </p>
+          <div className="flex gap-4 text-xs text-[#8E8E93]">
+            {data.trendDelta7d != null && (
+              <span>较 7 天前: <span className={data.trendDelta7d > 0 ? 'text-[#FF3B30]' : 'text-[#34C759]'}>
+                {data.trendDelta7d > 0 ? '+' : ''}{data.trendDelta7d.toFixed(1)}{unit}</span></span>
+            )}
+            {data.trendDelta30d != null && (
+              <span>较 30 天前: <span className={data.trendDelta30d > 0 ? 'text-[#FF3B30]' : 'text-[#34C759]'}>
+                {data.trendDelta30d > 0 ? '+' : ''}{data.trendDelta30d.toFixed(1)}{unit}</span></span>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Health Reference Card */}
       {ref && (
         <div className="bg-gradient-to-br from-[#007AFF]/5 to-[#5856D6]/5 rounded-2xl border border-[#007AFF]/10 p-5">

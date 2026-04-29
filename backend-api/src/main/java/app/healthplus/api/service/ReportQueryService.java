@@ -190,19 +190,28 @@ public class ReportQueryService {
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(
                 "SELECT " + dateColumn + " as d, " +
                 (CUM_SET.contains("'" + metricKey + "'") ? "value_sum" : "value_avg") + " as value_avg, " +
-                "value_min, value_max, baseline_avg_30d, trend_delta_7d, trend_delta_30d " +
+                "value_min, value_max, baseline_avg_30d, trend_delta_7d, trend_delta_30d, " +
+                (table.equals("health_metric_daily") ? "anomaly_flag, " : "") +
+                "1 as dummy " +
                 "FROM " + table + " WHERE upload_id = ?::uuid AND metric_key = ? ORDER BY d",
                 reportId, metricKey
         );
 
         List<MetricPoint> points = new ArrayList<>();
+        boolean anomaly = false;
+        Double baseline = null, delta7 = null, delta30 = null;
         for (Map<String, Object> row : rows) {
             Double value = row.get("value_avg") != null ? ((Number) row.get("value_avg")).doubleValue() : null;
             String date = row.get("d") != null ? row.get("d").toString() : "";
             points.add(new MetricPoint(date, value));
+            if (row.get("anomaly_flag") instanceof Boolean f && f) anomaly = true;
+            if (row.get("baseline_avg_30d") != null) baseline = ((Number) row.get("baseline_avg_30d")).doubleValue();
+            if (row.get("trend_delta_7d") != null) delta7 = ((Number) row.get("trend_delta_7d")).doubleValue();
+            if (row.get("trend_delta_30d") != null) delta30 = ((Number) row.get("trend_delta_30d")).doubleValue();
         }
 
-        return new MetricSeriesResponse(metricKey, toLabelStr(metricKey), granularity.name().toLowerCase(), points);
+        return new MetricSeriesResponse(metricKey, toLabelStr(metricKey), granularity.name().toLowerCase(),
+                points, anomaly, baseline, delta7, delta30);
     }
 
     private String toLabelStr(String metricKey) {

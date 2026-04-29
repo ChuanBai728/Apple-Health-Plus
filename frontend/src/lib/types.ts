@@ -48,6 +48,10 @@ export interface MetricSeriesResponse {
   label: string;
   granularity: string;
   points: MetricPoint[];
+  anomaly: boolean;
+  baselineAvg30d: number | null;
+  trendDelta7d: number | null;
+  trendDelta30d: number | null;
 }
 
 export interface ChatMessageRequest {
