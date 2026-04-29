@@ -40,9 +40,9 @@ function MetricContent() {
       {data && data.points.length > 0 && data.points[data.points.length - 1].anomaly && (() => {
         const lp = data.points[data.points.length - 1];
         return (
-        <div className="bg-[#FFFBF5] border border-[#FF9500]/20 rounded-2xl p-5 space-y-2">
+        <div className="bg-[#FFFBF5] border border-[#FF9500]/20 rounded-3xl p-5 space-y-2">
           <h3 className="text-sm font-bold text-[#FF9500]">⚠ 检测到异常波动</h3>
-          <p className="text-sm text-[#3A3A3C] leading-relaxed">
+          <p className="text-sm text-slate-700 leading-relaxed">
             最新值 {lp.value?.toFixed(1)}{unit}
             {lp.baselineAvg30d != null ? `，偏离 30 天基线 ${lp.baselineAvg30d.toFixed(1)}${unit}` : ''}
             （超过 2.5 倍标准差）
@@ -62,17 +62,17 @@ function MetricContent() {
 
       {/* Health Reference Card */}
       {ref && (
-        <div className="bg-gradient-to-br from-[#007AFF]/5 to-[#5856D6]/5 rounded-2xl border border-[#007AFF]/10 p-5">
+        <div className="bg-gradient-to-br from-[#007AFF]/5 to-[#5856D6]/5 rounded-3xl border border-[#007AFF]/10 p-5">
           <h3 className="font-bold text-blue-900 mb-2">📖 关于{label}</h3>
           <p className="text-sm text-blue-800 leading-relaxed mb-2">{ref.description}</p>
           <div className="flex gap-4 text-xs mt-3">
             <div className="flex-1 bg-white/70 rounded-xl p-3">
               <span className="font-semibold text-emerald-700">健康范围</span>
-              <p className="text-[#3A3A3C] mt-0.5 leading-relaxed">{ref.healthyRange}</p>
+              <p className="text-slate-700 mt-0.5 leading-relaxed">{ref.healthyRange}</p>
             </div>
             <div className="flex-1 bg-white/70 rounded-xl p-3">
               <span className="font-semibold text-amber-700">健康建议</span>
-              <p className="text-[#3A3A3C] mt-0.5 leading-relaxed">{ref.advice}</p>
+              <p className="text-slate-700 mt-0.5 leading-relaxed">{ref.advice}</p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@ function MetricContent() {
         {COMPARE_OPTIONS.filter(m => m !== metricKey).map(m => <option key={m} value={m}>{METRIC_LABELS[m] || m}</option>)}
       </select>
 
-      {error && <div className="bg-[#FF3B30]/5 rounded-2xl p-4 text-[#FF3B30] text-sm">{error}</div>}
+      {error && <div className="bg-[#FF3B30]/5 rounded-3xl p-4 text-[#FF3B30] text-sm">{error}</div>}
       {data && <TrendChart data={data.points} label={data.label || label} />}
 
       {data && data.points.length > 0 && (

@@ -12,10 +12,10 @@ type TimeRange = 'all' | 'year' | 'month' | 'week';
 /* ── Left Report Panel ───────────────────────────── */
 function ReportPanel({ insight, insightType, setInsightType }: any) {
   return (
-    <div className="sticky top-14 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
+    <div className="sticky top-14 bg-white rounded-3xl border border-black/5 p-4" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm font-bold text-[#1C1C1E]">健康报告</span>
-        <div className="flex gap-1 bg-[#F2F2F7] rounded-lg p-0.5">
+        <div className="flex gap-1 bg-slate-100 rounded-lg p-0.5">
           <button onClick={()=>setInsightType('weekly')} className={`px-2.5 py-0.5 text-xs rounded-md font-medium transition ${insightType==='weekly'?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93]'}`}>周</button>
           <button onClick={()=>setInsightType('monthly')} className={`px-2.5 py-0.5 text-xs rounded-md font-medium transition ${insightType==='monthly'?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93]'}`}>月</button>
         </div>
@@ -23,12 +23,12 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
       {!insight && <div className="text-center py-4 text-xs text-[#8E8E93]">加载中...</div>}
       {insight && <div className="space-y-3">
         <div className="text-xs text-[#8E8E93]">{insight.startDate}~{insight.endDate}</div>
-        <div className="space-y-1">{insight.highlights?.slice(0,8).map((h:any)=>(<div key={h.metricKey} className="flex items-center gap-2 bg-[#F2F2F7] rounded-lg px-2.5 py-1.5 text-xs">
-          <span className="flex-1 text-[#3A3A3C]">{METRIC_LABELS[h.metricKey]||h.metricKey}</span>
+        <div className="space-y-1">{insight.highlights?.slice(0,8).map((h:any)=>(<div key={h.metricKey} className="flex items-center gap-2 bg-slate-100 rounded-lg px-2.5 py-1.5 text-xs">
+          <span className="flex-1 text-slate-700">{METRIC_LABELS[h.metricKey]||h.metricKey}</span>
           <span className="font-semibold">{h.weeklyAvg.toFixed(1)}{METRIC_UNITS[h.metricKey]||''}</span>
           <span className={`font-bold px-1.5 py-0.5 rounded text-[11px] ${h.changePct>0?'bg-[#34C759]/10 text-[#34C759]':'bg-[#FF3B30]/10 text-[#FF3B30]'}`}>{h.trend}{Math.abs(h.changePct).toFixed(0)}%</span>
         </div>))}</div>
-        <div className="text-xs text-[#3A3A3C] leading-relaxed whitespace-pre-line">{insight.aiNarrative}</div>
+        <div className="text-xs text-slate-700 leading-relaxed whitespace-pre-line">{insight.aiNarrative}</div>
       </div>}
     </div>
   );
@@ -38,16 +38,16 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
 function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
   return (
     <aside className="w-[300px] shrink-0">
-      <div className="sticky top-14 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 flex flex-col" style={{height:'calc(100vh - 80px)'}}>
+      <div className="sticky top-14 bg-white rounded-3xl border border-black/5 flex flex-col" style={{height:'calc(100vh - 80px)'}}>
         <div className="px-4 py-3 border-b border-black/5 text-sm font-bold text-[#1C1C1E] shrink-0">AI 对话</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {chatMsgs.length===0&&(<div className="text-center py-6 space-y-2"><p className="text-xs text-[#8E8E93]">基于你的健康数据提问</p>
-          <div className="flex flex-wrap gap-1.5 justify-center">{['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-2.5 py-1 bg-[#F2F2F7] hover:bg-black/[0.04] rounded-full text-xs text-[#3A3A3C]">{q}</button>))}</div></div>)}
+          <div className="flex flex-wrap gap-1.5 justify-center">{['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-2.5 py-1 bg-slate-100 hover:bg-black/[0.04] rounded-full text-xs text-slate-700">{q}</button>))}</div></div>)}
           {chatMsgs.map((m:any,i:number)=>(<div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[85%] rounded-xl px-3 py-2 text-xs ${m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-[#E9E9EF] text-[#1C1C1E] rounded-bl-sm'}`}>{m.content}</div></div>))}
           {chatLoading&&<div className="text-center text-xs text-[#8E8E93]">AI 分析中...</div>}
         </div>
         <div className="p-2 border-t border-black/5 flex gap-1.5 shrink-0">
-          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入问题..." disabled={chatLoading} className="flex-1 px-3 py-1.5 bg-[#F2F2F7] rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
+          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入问题..." disabled={chatLoading} className="flex-1 px-3 py-1.5 bg-slate-100 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
           <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()} className="px-3 py-1.5 bg-[#007AFF] text-white rounded-full text-xs font-medium disabled:opacity-40">发送</button>
         </div>
       </div>
@@ -85,14 +85,14 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
   const standPct = Math.min(((rhr?.latest??0) > 0 ? 0.83 : 0), 1); // simplified
 
   return (
-    <div className="col-span-2 row-span-2 bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-3xl p-6 border border-black/5 flex flex-col justify-between shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+    <div className="col-span-2 row-span-2 bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-3xl p-6 border border-black/5 flex flex-col justify-between shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
       {/* Top: status + headline */}
       <div>
         <div className="flex items-center justify-between">
           <p className="text-xs font-bold text-[#8E8E93] uppercase tracking-[0.2em]">健康概览</p>
           <span className={`text-xs font-bold px-3 py-1 rounded-full ${stateC}`}>{state}</span>
         </div>
-        <p className="text-sm text-[#3A3A3C] leading-relaxed mt-2">{data.headline}</p>
+        <p className="text-sm text-slate-700 leading-relaxed mt-2">{data.headline}</p>
       </div>
 
       {/* Middle: step count + activity rings */}
@@ -159,7 +159,7 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
       {/* Bottom bar: time range + AI report link */}
       <div className="flex items-center gap-2">
         <div className="flex gap-1 bg-black/[0.04] rounded-full p-0.5">
-          {(['week','month','year','all'] as TimeRange[]).map(r=><button key={r} onClick={()=>onRange(r)} className={`px-3.5 py-1.5 text-xs rounded-full font-semibold transition ${range===r?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93] hover:text-[#3A3A3C] hover:bg-black/[0.02]'}`}>{ {week:'周',month:'月',year:'年',all:'全部'}[r]}</button>)}
+          {(['week','month','year','all'] as TimeRange[]).map(r=><button key={r} onClick={()=>onRange(r)} className={`px-3.5 py-1.5 text-xs rounded-full font-semibold transition ${range===r?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93] hover:text-slate-700 hover:bg-black/[0.02]'}`}>{ {week:'周',month:'月',year:'年',all:'全部'}[r]}</button>)}
         </div>
       </div>
     </div>
@@ -176,7 +176,7 @@ function SnapshotCard({ card, id }: { card: any; id: string }) {
 
   return (
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
-      className="col-span-1 row-span-1 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all group flex flex-col justify-between min-h-[140px]">
+      className="col-span-1 row-span-1 bg-white rounded-3xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all group flex flex-col justify-between min-h-[140px]">
       <div>
         <div className="flex items-start justify-between">
           <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em] leading-tight">{l}</p>
@@ -210,7 +210,7 @@ function TrendCard({ card, id }: { card: any; id: string }) {
 
   return (
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
-      className="col-span-2 row-span-1 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all flex items-center gap-6 min-h-[100px]">
+      className="col-span-2 row-span-1 bg-white rounded-3xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all flex items-center gap-6 min-h-[100px]">
       <div className="shrink-0 min-w-[130px]">
         <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em]">{l}</p>
         <div className="flex items-baseline gap-1 mt-1">
@@ -320,12 +320,12 @@ export default function OverviewPage() {
         <div className="flex items-center gap-3">
           <Link href="/" className="text-xs font-medium text-[#007AFF] hover:underline transition-colors">← 首页</Link>
           <div className="flex-1"/>
-          <Link href={`/reports/${reportId}/heatmap`} className="px-3.5 py-2 bg-white/70 backdrop-blur-xl border border-black/5 rounded-full text-xs font-medium hover:bg-black/[0.02] transition-colors">🗓 热力图</Link>
+          <Link href={`/reports/${reportId}/heatmap`} className="px-3.5 py-2 bg-white border border-black/5 rounded-full text-xs font-medium hover:bg-black/[0.02] transition-colors">🗓 热力图</Link>
         </div>
 
       {/* ── Anomaly alert ── */}
       {anomalyCards.length>0 && (
-        <div className="bg-[#FFFBF5] border border-[#FF9500]/15 rounded-2xl px-5 py-3 flex items-center gap-3">
+        <div className="bg-[#FFFBF5] border border-[#FF9500]/15 rounded-3xl px-5 py-3 flex items-center gap-3">
           <span className="text-sm font-bold text-[#FF9500] shrink-0">⚠ {anomalyCards.length} 项异常</span>
           <div className="flex gap-1.5 flex-wrap">
             {anomalyCards.map(c=><Link key={c.metricKey} href={`/reports/${reportId}/metrics/${c.metricKey}`} className="px-2.5 py-0.5 bg-white border border-[#FF9500]/20 rounded-full text-xs text-[#FF9500] hover:bg-[#FF9500]/5 transition-colors">{METRIC_LABELS[c.metricKey]||c.metricKey}</Link>)}
@@ -351,7 +351,7 @@ export default function OverviewPage() {
       </div>
 
       {/* ── Collapsible: 更多指标 ── */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-5">
+      <div className="bg-white rounded-3xl border border-black/5 p-5">
         <button onClick={()=>setShowAll(!showAll)}
           className="flex items-center gap-2 text-sm font-semibold text-[#8E8E93] hover:text-[#1C1C1E] transition-colors w-full">
           <span className={`transform transition-transform ${showAll?'rotate-90':''}`}>▸</span>

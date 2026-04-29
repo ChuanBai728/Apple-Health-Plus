@@ -153,7 +153,7 @@ export default function UploadProgressPage() {
       </div>
 
       {/* Progress bar with shimmer */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-3">
+      <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5 space-y-3">
         <div className="flex justify-between text-sm">
           <span className="text-[#8E8E93] truncate max-w-[200px]">{status.fileName}</span>
           <span className="text-[#8E8E93]/70">{progress}%</span>
@@ -189,7 +189,7 @@ export default function UploadProgressPage() {
 
       {/* Ready */}
       {status.status === 'ready' && (
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-2xl p-6 text-center space-y-4">
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-3xl p-6 text-center space-y-4">
           <p className="text-green-800 font-bold text-lg">数据已就绪</p>
           <p className="text-green-600 text-sm">
             健康指标已完成解析和聚合，耗时 {formatTime(elapsed)}
@@ -205,7 +205,7 @@ export default function UploadProgressPage() {
 
       {/* Failed */}
       {status.status === 'failed' && (
-        <div className="bg-gradient-to-br from-red-50 to-rose-50 border border-red-200 rounded-2xl p-6 space-y-4">
+        <div className="bg-gradient-to-br from-red-50 to-rose-50 border border-red-200 rounded-3xl p-6 space-y-4">
           <p className="text-red-800 font-bold">处理失败</p>
           {error && <p className="text-sm text-red-600 bg-white/50 rounded-lg p-3">{error}</p>}
           <div className="flex gap-3">

@@ -17,7 +17,7 @@ export function MetricCard({ card, reportId, category }: { card: OverviewCard; r
   return (
     <Link
       href={`/reports/${reportId}/metrics/${card.metricKey}`}
-      className={`block bg-white/70 backdrop-blur-xl rounded-2xl border overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all ${
+      className={`block bg-white rounded-3xl border overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all ${
         card.anomaly ? 'border-[#FF9500]/30 ring-1 ring-[#FF9500]/20' : 'border-black/5'
       }`}
     >
@@ -50,11 +50,11 @@ export function MetricCardCompact({ card, reportId }: { card: OverviewCard; repo
   return (
     <Link
       href={`/reports/${reportId}/metrics/${card.metricKey}`}
-      className="block bg-[#F2F2F7] rounded-xl border border-black/5 px-3 py-2 hover:bg-black/[0.02] transition-colors"
+      className="block bg-slate-100 rounded-xl border border-black/5 px-3 py-2 hover:bg-black/[0.02] transition-colors"
     >
       <div className="flex items-center justify-between">
         <span className="text-xs text-[#8E8E93]">{label}</span>
-        <span className="text-sm font-semibold text-[#3A3A3C]">
+        <span className="text-sm font-semibold text-slate-700">
           {card.latest != null ? card.latest.toFixed(1) : '--'}
           {unit && <span className="text-xs text-[#8E8E93]/70 ml-0.5">{unit}</span>}
         </span>

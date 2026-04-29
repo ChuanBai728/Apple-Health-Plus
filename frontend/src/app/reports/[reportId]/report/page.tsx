@@ -32,7 +32,7 @@ export default function ReportPage() {
     <div className="max-w-2xl mx-auto pb-10">
       <div className="flex items-center justify-between mb-6">
         <Link href={`/reports/${reportId}/overview`} className="text-[#007AFF] hover:underline text-sm">← 概览</Link>
-        <div className="flex gap-1 bg-[#F2F2F7] rounded-xl p-0.5">
+        <div className="flex gap-1 bg-slate-100 rounded-xl p-0.5">
           <button onClick={() => setType('weekly')} className={`px-3 py-1 text-xs rounded-md font-medium transition ${type==='weekly'?'bg-white shadow-sm text-[#1C1C1E]':'text-[#8E8E93]'}`}>周报</button>
           <button onClick={() => setType('monthly')} className={`px-3 py-1 text-xs rounded-md font-medium transition ${type==='monthly'?'bg-white shadow-sm text-[#1C1C1E]':'text-[#8E8E93]'}`}>月报</button>
         </div>
@@ -48,7 +48,7 @@ export default function ReportPage() {
       </div>
 
       {/* Metric Highlights */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-3xl border border-black/5 p-6 mb-5">
+      <div className="bg-white rounded-3xl border border-black/5 p-6 mb-5">
         <h3 className="text-lg font-extrabold text-[#1C1C1E] mb-4">📈 核心指标变化</h3>
         <div className="space-y-2">
           {data.highlights.map((h: any) => {
@@ -56,8 +56,8 @@ export default function ReportPage() {
             const label = METRIC_LABELS[h.metricKey] || h.metricKey;
             const unit = METRIC_UNITS[h.metricKey] || '';
             return (
-              <div key={h.metricKey} className="flex items-center gap-3 bg-[#F2F2F7] rounded-xl px-4 py-2.5">
-                <span className="text-sm font-medium text-[#3A3A3C] flex-1">{label}</span>
+              <div key={h.metricKey} className="flex items-center gap-3 bg-slate-100 rounded-xl px-4 py-2.5">
+                <span className="text-sm font-medium text-slate-700 flex-1">{label}</span>
                 <span className="text-sm font-bold">{h.weeklyAvg.toFixed(1)}{unit}</span>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${up?'bg-[#34C759]/10 text-[#34C759]':'bg-[#FF3B30]/10 text-[#FF3B30]'}`}>
                   {h.trend} {Math.abs(h.changePct).toFixed(0)}%
@@ -79,7 +79,7 @@ export default function ReportPage() {
             const t = line.trim();
             if (!t) return <div key={i} className="h-2" />;
             if (SECTION_TITLES.test(t)) return <h4 key={i} className="text-base font-extrabold text-[#007AFF] mt-3 mb-1">{t}</h4>;
-            return <p key={i} className="text-[#3A3A3C] mb-1">{t}</p>;
+            return <p key={i} className="text-slate-700 mb-1">{t}</p>;
           })}
         </div>
         <p className="text-xs text-[#8E8E93]/70 mt-4">本结果仅基于用户上传数据进行非医疗分析</p>

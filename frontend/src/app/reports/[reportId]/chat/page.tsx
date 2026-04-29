@@ -97,7 +97,7 @@ export default function ChatPage() {
       </div>
 
       {/* Chat area */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto">
+      <div className="bg-white rounded-3xl border border-black/5 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto">
         {messages.length === 0 ? (
           <div className="text-center py-12 space-y-6">
             <div className="text-5xl">🤖</div>
@@ -108,7 +108,7 @@ export default function ChatPage() {
                   key={q}
                   onClick={() => handleSend(q)}
                   disabled={loading}
-                  className="px-3 py-1.5 bg-[#F2F2F7] hover:bg-black/[0.06] rounded-full text-sm text-gray-700 disabled:opacity-50 transition-colors"
+                  className="px-3 py-1.5 bg-slate-100 hover:bg-black/[0.06] rounded-full text-sm text-gray-700 disabled:opacity-50 transition-colors"
                 >
                   {q}
                 </button>

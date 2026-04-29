@@ -90,27 +90,27 @@ export default function HomePage() {
       {/* Main content */}
       <div className="space-y-8">
           {/* How to Export Guide */}
-          <div className="max-w-lg mx-auto bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-2xl p-6 border border-black/5">
+          <div className="max-w-lg mx-auto bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-3xl p-6 border border-black/5">
             <h3 className="text-sm font-semibold text-[#007AFF] mb-3">如何获取导出数据？</h3>
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">1</div>
-              <p className="text-sm text-[#3A3A3C]">打开 iPhone 上的 <strong>“健康”</strong> App</p>
+              <p className="text-sm text-slate-700">打开 iPhone 上的 <strong>“健康”</strong> App</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">2</div>
-              <p className="text-sm text-[#3A3A3C]">点击右上角 <strong>头像</strong>（或个人资料图标）</p>
+              <p className="text-sm text-slate-700">点击右上角 <strong>头像</strong>（或个人资料图标）</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">3</div>
-              <p className="text-sm text-[#3A3A3C]">下滑到底部，点击 <strong>“导出所有健康数据”</strong></p>
+              <p className="text-sm text-slate-700">下滑到底部，点击 <strong>“导出所有健康数据”</strong></p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">4</div>
-              <p className="text-sm text-[#3A3A3C]">保存生成的 <code className="bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 text-xs font-mono">导出.zip</code> 文件</p>
+              <p className="text-sm text-slate-700">保存生成的 <code className="bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 text-xs font-mono">导出.zip</code> 文件</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">5</div>
-              <p className="text-sm text-[#3A3A3C]">在此页面拖拽或选择该文件上传分析</p>
+              <p className="text-sm text-slate-700">在此页面拖拽或选择该文件上传分析</p>
             </div>
           </div>
 
@@ -118,15 +118,15 @@ export default function HomePage() {
           <div
             onDrop={handleDrop}
             onDragOver={(e) => e.preventDefault()}
-            className={`max-w-lg mx-auto rounded-2xl p-8 text-center transition-all duration-300 ${
+            className={`max-w-lg mx-auto rounded-3xl p-8 text-center transition-all duration-300 ${
               uploading
                 ? 'bg-gradient-to-br from-[#F8F8FC] to-[#EEF0FF] border-2 border-[#007AFF]/20 shadow-lg'
-                : 'bg-white/70 backdrop-blur-xl border-2 border-dashed border-black/10 hover:border-black/20 hover:shadow-md'
+                : 'bg-white border-2 border-dashed border-black/10 hover:border-black/20 hover:shadow-md'
             }`}
           >
         {uploading ? (
           <div className="space-y-5">
-            <div className="w-16 h-16 mx-auto bg-blue-100 rounded-2xl flex items-center justify-center text-3xl animate-pulse">
+            <div className="w-16 h-16 mx-auto bg-blue-100 rounded-3xl flex items-center justify-center text-3xl animate-pulse">
               {phase === 'uploading' ? '📤' : '⏳'}
             </div>
             <p className="text-gray-800 font-semibold">
@@ -156,11 +156,11 @@ export default function HomePage() {
           </div>
         ) : !file ? (
           <div className="space-y-4">
-            <div className="w-14 h-14 mx-auto bg-blue-50 rounded-2xl flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 mx-auto bg-blue-50 rounded-3xl flex items-center justify-center text-2xl">
               📁
             </div>
             <div>
-              <p className="text-[#3A3A3C] font-medium">拖拽 导出.zip 到此处</p>
+              <p className="text-slate-700 font-medium">拖拽 导出.zip 到此处</p>
               <p className="text-xs text-[#8E8E93]/70 mt-1">或点击下方按钮选择文件</p>
             </div>
             <input ref={fileInput} type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
@@ -173,7 +173,7 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="w-14 h-14 mx-auto bg-[#34C759]/5 rounded-2xl flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 mx-auto bg-[#34C759]/5 rounded-3xl flex items-center justify-center text-2xl">
               ✅
             </div>
             <p className="text-gray-800 font-semibold truncate">{file.name}</p>
@@ -190,7 +190,7 @@ export default function HomePage() {
           </div>
         )}
         {error && (
-          <p className="mt-4 text-sm text-[#FF3B30] bg-[#FF3B30]/5 rounded-2xl px-4 py-3 border border-[#FF3B30]/10">{error}</p>
+          <p className="mt-4 text-sm text-[#FF3B30] bg-[#FF3B30]/5 rounded-3xl px-4 py-3 border border-[#FF3B30]/10">{error}</p>
         )}
       </div>
 
@@ -200,7 +200,7 @@ export default function HomePage() {
             <button
               onClick={handleDemo}
               disabled={uploading}
-              className="px-6 py-2.5 bg-white border-2 border-[#5856D6]/20 text-[#5856D6] rounded-2xl hover:bg-[#5856D6]/5 hover:border-[#5856D6]/30 disabled:opacity-40 transition-all text-sm font-semibold shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
+              className="px-6 py-2.5 bg-white border-2 border-[#5856D6]/20 text-[#5856D6] rounded-3xl hover:bg-[#5856D6]/5 hover:border-[#5856D6]/30 disabled:opacity-40 transition-all text-sm font-semibold shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
             >
               🚀 快速预览示例数据
             </button>
@@ -213,7 +213,7 @@ export default function HomePage() {
               { icon: '📈', title: '趋势图表', desc: '心率、睡眠、步数等核心指标日/周/月趋势', color: 'bg-[#34C759]/5 border-[#34C759]/10' },
               { icon: '🤖', title: 'AI 深度对话', desc: '基于真实数据，DeepSeek 多轮分析健康状态', color: 'bg-[#5856D6]/5 border-[#5856D6]/10' },
             ].map((f) => (
-              <div key={f.title} className={`bg-white/70 backdrop-blur-xl ${f.color} border rounded-2xl p-5 text-center`}>
+              <div key={f.title} className={`bg-white ${f.color} border rounded-3xl p-5 text-center`}>
                 <div className="text-2xl mb-2">{f.icon}</div>
                 <h3 className="font-bold text-[#1C1C1E] text-sm mb-1">{f.title}</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">{f.desc}</p>

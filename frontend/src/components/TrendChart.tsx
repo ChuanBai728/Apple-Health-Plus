@@ -14,7 +14,7 @@ export function TrendChart({ data, label }: { data: MetricPoint[]; label: string
   }));
 
   return (
-    <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-6">
+    <div className="bg-white rounded-3xl border border-black/5 p-6">
       <h3 className="text-lg font-semibold text-[#1C1C1E] mb-4">{label}</h3>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={chartData}>

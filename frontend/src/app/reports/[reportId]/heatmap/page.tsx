@@ -46,7 +46,7 @@ export default function HeatmapPage() {
         {METRICS.map(m => (
           <button key={m} onClick={() => setMetric(m)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              metric === m ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-black/[0.04]'
+              metric === m ? 'bg-[#1C1C1E] text-white' : 'bg-slate-100 text-[#8E8E93] hover:bg-black/[0.04]'
             }`}>{METRIC_LABELS[m] || m}</button>
         ))}
       </div>
@@ -54,7 +54,7 @@ export default function HeatmapPage() {
       {loading ? (
         <div className="text-center py-12 text-gray-400">加载中...</div>
       ) : (
-        <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4">
+        <div className="bg-white rounded-3xl border border-black/5 p-4">
           <div className="grid grid-cols-[repeat(auto-fill,minmax(14px,1fr))] gap-[2px]">
             {data.map((d, i) => (
               <div key={i}
