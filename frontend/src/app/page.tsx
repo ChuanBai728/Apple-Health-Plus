@@ -73,16 +73,16 @@ export default function HomePage() {
     <div className="max-w-6xl mx-auto px-4">
       {/* Hero */}
       <div className="text-center space-y-5 pt-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#007AFF]/8 text-[#007AFF] rounded-full text-sm font-medium">
           <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
           基于 DeepSeek AI 深度分析
         </div>
-        <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
+        <h1 className="text-4xl font-extrabold tracking-tight text-[#1C1C1E] leading-tight">
           Apple Health+
           <br />
           苹果健康数据可视化与 AI 洞察
         </h1>
-        <p className="text-lg text-gray-500 max-w-xl mx-auto leading-relaxed">
+        <p className="text-lg text-[#8E8E93] max-w-xl mx-auto leading-relaxed">
           上传 Apple Health 导出的 导出.zip，自动生成健康指标图表、趋势分析，与 AI 深度对话你的健康数据
         </p>
       </div>
@@ -90,27 +90,27 @@ export default function HomePage() {
       {/* Main content */}
       <div className="space-y-8">
           {/* How to Export Guide */}
-          <div className="max-w-lg mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
-            <h3 className="text-sm font-semibold text-blue-800 mb-3">如何获取导出数据？</h3>
+          <div className="max-w-lg mx-auto bg-gradient-to-br from-white via-[#F8F8FC] to-[#EEF0FF] rounded-2xl p-6 border border-black/5">
+            <h3 className="text-sm font-semibold text-[#007AFF] mb-3">如何获取导出数据？</h3>
             <div className="flex items-start gap-3">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">1</div>
-              <p className="text-sm text-gray-700">打开 iPhone 上的 <strong>“健康”</strong> App</p>
+              <p className="text-sm text-[#3A3A3C]">打开 iPhone 上的 <strong>“健康”</strong> App</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">2</div>
-              <p className="text-sm text-gray-700">点击右上角 <strong>头像</strong>（或个人资料图标）</p>
+              <p className="text-sm text-[#3A3A3C]">点击右上角 <strong>头像</strong>（或个人资料图标）</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">3</div>
-              <p className="text-sm text-gray-700">下滑到底部，点击 <strong>“导出所有健康数据”</strong></p>
+              <p className="text-sm text-[#3A3A3C]">下滑到底部，点击 <strong>“导出所有健康数据”</strong></p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">4</div>
-              <p className="text-sm text-gray-700">保存生成的 <code className="bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 text-xs font-mono">导出.zip</code> 文件</p>
+              <p className="text-sm text-[#3A3A3C]">保存生成的 <code className="bg-blue-100 px-1.5 py-0.5 rounded text-blue-700 text-xs font-mono">导出.zip</code> 文件</p>
             </div>
             <div className="flex items-start gap-3 mt-2">
               <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 text-sm font-bold">5</div>
-              <p className="text-sm text-gray-700">在此页面拖拽或选择该文件上传分析</p>
+              <p className="text-sm text-[#3A3A3C]">在此页面拖拽或选择该文件上传分析</p>
             </div>
           </div>
 
@@ -120,8 +120,8 @@ export default function HomePage() {
             onDragOver={(e) => e.preventDefault()}
             className={`max-w-lg mx-auto rounded-2xl p-8 text-center transition-all duration-300 ${
               uploading
-                ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 shadow-lg'
-                : 'bg-white border-2 border-dashed border-gray-200 hover:border-gray-300 hover:shadow-md'
+                ? 'bg-gradient-to-br from-[#F8F8FC] to-[#EEF0FF] border-2 border-[#007AFF]/20 shadow-lg'
+                : 'bg-white/70 backdrop-blur-xl border-2 border-dashed border-black/10 hover:border-black/20 hover:shadow-md'
             }`}
           >
         {uploading ? (
@@ -136,20 +136,20 @@ export default function HomePage() {
             </p>
             {phase === 'uploading' && (
               <>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-[#8E8E93]">
                   {formatSize(progress.loaded)} / {formatSize(progress.total)}
                 </p>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-black/5 rounded-full h-2.5 overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300"
+                    className="h-full rounded-full bg-gradient-to-r bg-[#007AFF] transition-all duration-300"
                     style={{ width: `${progress.percent}%` }}
                   />
                 </div>
               </>
             )}
             {phase === 'processing' && (
-              <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
-                <div className="h-full w-full rounded-full bg-gradient-to-r from-blue-400 via-indigo-500 to-blue-400 animate-shimmer"
+              <div className="w-full bg-black/5 rounded-full h-2.5 overflow-hidden">
+                <div className="h-full w-full rounded-full bg-[#007AFF] animate-shimmer"
                   style={{ backgroundSize: '200% 100%' }} />
               </div>
             )}
@@ -160,47 +160,47 @@ export default function HomePage() {
               📁
             </div>
             <div>
-              <p className="text-gray-700 font-medium">拖拽 导出.zip 到此处</p>
-              <p className="text-xs text-gray-400 mt-1">或点击下方按钮选择文件</p>
+              <p className="text-[#3A3A3C] font-medium">拖拽 导出.zip 到此处</p>
+              <p className="text-xs text-[#8E8E93]/70 mt-1">或点击下方按钮选择文件</p>
             </div>
             <input ref={fileInput} type="file" accept=".zip" onChange={handleFileChange} className="hidden" />
             <button
               onClick={() => fileInput.current?.click()}
-              className="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-semibold shadow-lg shadow-blue-200"
+              className="px-8 py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] transition-all font-semibold shadow-lg shadow-[#007AFF]/20"
             >
               选择文件
             </button>
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="w-14 h-14 mx-auto bg-green-50 rounded-2xl flex items-center justify-center text-2xl">
+            <div className="w-14 h-14 mx-auto bg-[#34C759]/5 rounded-2xl flex items-center justify-center text-2xl">
               ✅
             </div>
             <p className="text-gray-800 font-semibold truncate">{file.name}</p>
-            <p className="text-sm text-gray-500">{formatSize(file.size)}</p>
+            <p className="text-sm text-[#8E8E93]">{formatSize(file.size)}</p>
             <button
               onClick={handleUpload}
-              className="w-full py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all text-lg font-bold shadow-xl shadow-blue-200"
+              className="w-full py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] transition-all text-lg font-bold shadow-xl shadow-[#007AFF]/20"
             >
               开始分析
             </button>
-            <button onClick={() => { setFile(null); setError(''); }} className="text-sm text-gray-400 hover:text-gray-600">
+            <button onClick={() => { setFile(null); setError(''); }} className="text-sm text-[#8E8E93]/70 hover:text-gray-600">
               重新选择
             </button>
           </div>
         )}
         {error && (
-          <p className="mt-4 text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3 border border-red-100">{error}</p>
+          <p className="mt-4 text-sm text-[#FF3B30] bg-[#FF3B30]/5 rounded-2xl px-4 py-3 border border-[#FF3B30]/10">{error}</p>
         )}
       </div>
 
           {/* Demo Preview */}
           <div className="max-w-lg mx-auto text-center">
-            <div className="text-xs text-gray-400 mb-2">不想上传真实数据？试试示例</div>
+            <div className="text-xs text-[#8E8E93]/70 mb-2">不想上传真实数据？试试示例</div>
             <button
               onClick={handleDemo}
               disabled={uploading}
-              className="px-6 py-2.5 bg-white border-2 border-purple-200 text-purple-700 rounded-xl hover:bg-purple-50 hover:border-purple-300 disabled:opacity-40 transition-all text-sm font-semibold shadow-sm"
+              className="px-6 py-2.5 bg-white border-2 border-[#5856D6]/20 text-[#5856D6] rounded-2xl hover:bg-[#5856D6]/5 hover:border-[#5856D6]/30 disabled:opacity-40 transition-all text-sm font-semibold shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
             >
               🚀 快速预览示例数据
             </button>
@@ -209,20 +209,20 @@ export default function HomePage() {
           {/* Feature Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-lg mx-auto">
             {[
-              { icon: '📊', title: '自动解析', desc: '流式解析超大 XML，处理百万条健康记录', color: 'from-blue-50 to-blue-100 border-blue-200' },
-              { icon: '📈', title: '趋势图表', desc: '心率、睡眠、步数等核心指标日/周/月趋势', color: 'from-emerald-50 to-emerald-100 border-emerald-200' },
-              { icon: '🤖', title: 'AI 深度对话', desc: '基于真实数据，DeepSeek 多轮分析健康状态', color: 'from-purple-50 to-purple-100 border-purple-200' },
+              { icon: '📊', title: '自动解析', desc: '流式解析超大 XML，处理百万条健康记录', color: 'bg-[#007AFF]/5 border-[#007AFF]/10' },
+              { icon: '📈', title: '趋势图表', desc: '心率、睡眠、步数等核心指标日/周/月趋势', color: 'bg-[#34C759]/5 border-[#34C759]/10' },
+              { icon: '🤖', title: 'AI 深度对话', desc: '基于真实数据，DeepSeek 多轮分析健康状态', color: 'bg-[#5856D6]/5 border-[#5856D6]/10' },
             ].map((f) => (
-              <div key={f.title} className={`bg-gradient-to-br ${f.color} border rounded-2xl p-5 text-center`}>
+              <div key={f.title} className={`bg-white/70 backdrop-blur-xl ${f.color} border rounded-2xl p-5 text-center`}>
                 <div className="text-2xl mb-2">{f.icon}</div>
-                <h3 className="font-bold text-gray-900 text-sm mb-1">{f.title}</h3>
+                <h3 className="font-bold text-[#1C1C1E] text-sm mb-1">{f.title}</h3>
                 <p className="text-xs text-gray-600 leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
       </div>
 
-      <p className="text-center text-xs text-gray-400 max-w-md mx-auto pb-4 pt-8">
+      <p className="text-center text-xs text-[#8E8E93]/70 max-w-md mx-auto pb-4 pt-8">
         你的健康数据仅用于本次分析，不会与第三方共享。本产品不提供医疗诊断，AI 分析仅供参考。
       </p>
     </div>

@@ -10,14 +10,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="zh-CN" className="h-full">
-      <body className="min-h-full bg-gray-50 text-gray-900 flex flex-col" suppressHydrationWarning>
+      <body className="min-h-full bg-[#F2F2F7] text-[#1C1C1E] flex flex-col antialiased" suppressHydrationWarning>
         <Providers>
-          <header className="bg-white border-b border-gray-200 px-6 py-4">
-            <a href="/" className="text-xl font-bold tracking-tight text-blue-600">
-              Apple Health+
-            </a>
+          <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-black/5">
+            <div className="max-w-[960px] mx-auto px-4 h-12 flex items-center">
+              <a href="/" className="text-lg font-bold tracking-tight text-[#007AFF]">
+                Apple Health+
+              </a>
+            </div>
           </header>
-          <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
+          <main className="flex-1 max-w-[960px] mx-auto w-full px-4 py-6">
             {children}
           </main>
         </Providers>
