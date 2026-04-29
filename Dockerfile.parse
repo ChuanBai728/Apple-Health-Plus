@@ -14,11 +14,12 @@ COPY shared-messaging/src shared-messaging/src/
 COPY shared-ai/src shared-ai/src/
 COPY shared-storage/src shared-storage/src/
 COPY parse-worker/src parse-worker/src/
-RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,parse-worker -DskipTests -B
+RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,parse-worker -DskipTests -B \
+    && mv parse-worker/target/parse-worker-*.jar /app/app.jar
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/parse-worker/target/parse-worker-*.jar app.jar
+COPY --from=build /app/app.jar app.jar
 ENTRYPOINT ["java", \
   "-Djdk.xml.maxGeneralEntitySizeLimit=0", \
   "-Djdk.xml.totalEntitySizeLimit=0", \

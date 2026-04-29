@@ -14,10 +14,11 @@ COPY shared-messaging/src shared-messaging/src/
 COPY shared-ai/src shared-ai/src/
 COPY shared-storage/src shared-storage/src/
 COPY backend-api/src backend-api/src/
-RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,backend-api -DskipTests -B
+RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,backend-api -DskipTests -B \
+    && mv backend-api/target/backend-api-*.jar /app/app.jar
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/backend-api/target/backend-api-*.jar app.jar
+COPY --from=build /app/app.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]

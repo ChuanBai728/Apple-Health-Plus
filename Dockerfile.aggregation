@@ -14,9 +14,10 @@ COPY shared-messaging/src shared-messaging/src/
 COPY shared-ai/src shared-ai/src/
 COPY shared-storage/src shared-storage/src/
 COPY aggregation-worker/src aggregation-worker/src/
-RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,aggregation-worker -DskipTests -B
+RUN mvn package -pl shared-domain,shared-messaging,shared-ai,shared-storage,aggregation-worker -DskipTests -B \
+    && mv aggregation-worker/target/aggregation-worker-*.jar /app/app.jar
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
-COPY --from=build /app/aggregation-worker/target/aggregation-worker-*.jar app.jar
+COPY --from=build /app/app.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
