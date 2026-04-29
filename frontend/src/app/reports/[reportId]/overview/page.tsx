@@ -35,7 +35,7 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
         <div className="space-y-1">{insight.highlights?.slice(0,8).map((h:any)=>(
           <div key={h.metricKey} className="flex items-center gap-2 bg-slate-50 rounded-xl px-3 py-2 text-xs">
             <span className="flex-1 text-slate-700 font-medium">{METRIC_LABELS[h.metricKey]||h.metricKey}</span>
-            <span className="font-semibold text-slate-900">{h.weeklyAvg.toFixed(1)}{METRIC_UNITS[h.metricKey]||''}</span>
+            <span className="font-semibold text-slate-900">{Number.isInteger(h.weeklyAvg)?h.weeklyAvg:h.weeklyAvg.toFixed(1)}{METRIC_UNITS[h.metricKey]||''}</span>
             <span className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${h.changePct>0?'bg-emerald-100/50 text-emerald-700':'bg-rose-100/50 text-rose-700'}`}>{h.trend}{Math.abs(h.changePct).toFixed(0)}%</span>
           </div>
         ))}</div>

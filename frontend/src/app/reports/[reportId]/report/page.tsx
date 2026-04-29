@@ -58,7 +58,7 @@ export default function ReportPage() {
             return (
               <div key={h.metricKey} className="flex items-center gap-3 bg-slate-100 rounded-xl px-4 py-2.5">
                 <span className="text-sm font-medium text-slate-700 flex-1">{label}</span>
-                <span className="text-sm font-bold">{h.weeklyAvg.toFixed(1)}{unit}</span>
+                <span className="text-sm font-bold">{Number.isInteger(h.weeklyAvg)?h.weeklyAvg:h.weeklyAvg.toFixed(1)}{unit}</span>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${up?'bg-[#34C759]/10 text-[#34C759]':'bg-[#FF3B30]/10 text-[#FF3B30]'}`}>
                   {h.trend} {Math.abs(h.changePct).toFixed(0)}%
                 </span>
