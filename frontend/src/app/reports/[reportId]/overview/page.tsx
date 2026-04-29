@@ -367,7 +367,7 @@ export default function OverviewPage() {
 
   return (
     <div className="w-full max-w-[1920px] mx-auto px-6 flex gap-5 py-4" style={{minHeight:'calc(100vh - 48px)'}}>
-      <div className="w-[300px] shrink-0"><ReportPanel insight={insight} insightType={insightType} setInsightType={setInsightType} /></div>
+      <div className="w-[320px] 2xl:w-[400px] shrink-0"><ReportPanel insight={insight} insightType={insightType} setInsightType={setInsightType} /></div>
       <div className="flex-1 min-w-0 space-y-5 overflow-y-auto">
         {/* ── Top bar ── */}
         <div className="flex items-center gap-3">
@@ -425,7 +425,7 @@ export default function OverviewPage() {
         )}
       </div>
       </div>
-      <div className="w-[320px] shrink-0"><ChatPanel chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} sendMsg={sendMsg} /></div>
+      <div className="w-[320px] 2xl:w-[380px] shrink-0"><ChatPanel chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} sendMsg={sendMsg} /></div>
     </div>
   );
 }
