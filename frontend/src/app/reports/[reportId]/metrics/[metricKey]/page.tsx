@@ -32,7 +32,7 @@ function MetricContent() {
   const ref = METRIC_REFERENCE[metricKey];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto">
       <button onClick={() => router.push(`/reports/${reportId}/overview`)}
         className="inline-flex items-center gap-1 text-[#007AFF] hover:underline text-sm font-medium">← 返回概览</button>
 

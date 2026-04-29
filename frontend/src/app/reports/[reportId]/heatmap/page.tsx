@@ -38,7 +38,7 @@ export default function HeatmapPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto">
       <button onClick={() => router.push(`/reports/${reportId}/overview`)} className="text-[#007AFF] hover:underline text-sm">← 返回概览</button>
       <h2 className="text-2xl font-bold">🗓 活动热力图</h2>
 

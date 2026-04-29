@@ -257,9 +257,15 @@ export default function OverviewPage() {
   const [chatLoading, setChatLoading] = useState(false);
 
   useEffect(() => { getOverview(reportId).then(setData).catch(e=>setError(e.message)); }, [reportId]);
+  const insightCK = `hp-insight-${reportId}-${insightType}`;
   useEffect(() => {
-    getInsight(reportId, insightType).then(setInsight).catch(()=>{});
-  }, [reportId, insightType]);
+    const c = localStorage.getItem(insightCK);
+    if (c) { setInsight(JSON.parse(c)); return; }
+    getInsight(reportId, insightType).then(d => {
+      setInsight(d);
+      try { localStorage.setItem(insightCK, JSON.stringify(d)); } catch {}
+    }).catch(()=>{});
+  }, [reportId, insightType, insightCK]);
 
   const sendMsg = useCallback(async (q: string) => {
     if (!q.trim() || chatLoading) return;
