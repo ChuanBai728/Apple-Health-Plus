@@ -88,27 +88,27 @@ export default function ChatPage() {
       <div className="flex items-center justify-between">
         <button
           onClick={() => router.push(`/reports/${reportId}/overview`)}
-          className="text-blue-600 hover:underline text-sm"
+          className="text-[#007AFF] hover:underline text-sm"
         >
           ← 返回概览
         </button>
-        <h2 className="text-xl font-bold text-gray-900">🤖 AI 健康对话</h2>
+        <h2 className="text-xl font-bold text-[#1C1C1E]">🤖 AI 健康对话</h2>
         <div className="w-16" />
       </div>
 
       {/* Chat area */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto">
+      <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 min-h-[400px] max-h-[60vh] overflow-y-auto">
         {messages.length === 0 ? (
           <div className="text-center py-12 space-y-6">
             <div className="text-5xl">🤖</div>
-            <p className="text-gray-500">基于你的健康数据，向我提问吧</p>
+            <p className="text-[#8E8E93]">基于你的健康数据，向我提问吧</p>
             <div className="flex flex-wrap gap-2 justify-center">
               {SUGGESTED_QUESTIONS.map((q) => (
                 <button
                   key={q}
                   onClick={() => handleSend(q)}
                   disabled={loading}
-                  className="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm text-gray-700 disabled:opacity-50 transition-colors"
+                  className="px-3 py-1.5 bg-[#F2F2F7] hover:bg-black/[0.06] rounded-full text-sm text-gray-700 disabled:opacity-50 transition-colors"
                 >
                   {q}
                 </button>
@@ -126,7 +126,7 @@ export default function ChatPage() {
             AI 正在分析...
           </div>
         )}
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {error && <p className="text-[#FF3B30] text-sm">{error}</p>}
         <div ref={chatEndRef} />
       </div>
 
@@ -138,12 +138,12 @@ export default function ChatPage() {
           onKeyDown={(e) => e.key === 'Enter' && handleSend(input)}
           placeholder="输入健康问题..."
           disabled={loading}
-          className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          className="flex-1 px-4 py-3 border border-black/10 rounded-full focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30 disabled:opacity-50"
         />
         <button
           onClick={() => handleSend(input)}
           disabled={loading || !input.trim()}
-          className="px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+          className="px-6 py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0077EE] disabled:opacity-50 transition-colors font-medium"
         >
           发送
         </button>

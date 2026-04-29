@@ -86,7 +86,7 @@ export default function UploadProgressPage() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="animate-spin h-10 w-10 border-4 border-blue-600 border-t-transparent rounded-full" />
-        <span className="ml-4 text-gray-500 text-lg">加载中...</span>
+        <span className="ml-4 text-[#8E8E93] text-lg">加载中...</span>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function UploadProgressPage() {
     <div className="max-w-lg mx-auto space-y-6 pt-8">
       <div className="text-center">
         <div className="text-5xl mb-4">{STATUS_ICONS[status.status] || '⏳'}</div>
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className="text-2xl font-bold text-[#1C1C1E]">
           {status.status === 'ready'
             ? '处理完成！'
             : status.status === 'failed'
@@ -110,7 +110,7 @@ export default function UploadProgressPage() {
             : '正在分析数据'}
         </h2>
         {isRunning && (
-          <p className="text-gray-400 text-sm mt-1">
+          <p className="text-[#8E8E93]/70 text-sm mt-1">
             已耗时 {formatTime(elapsed)}
           </p>
         )}
@@ -134,7 +134,7 @@ export default function UploadProgressPage() {
                 {done ? '✅' : phase.icon}
               </span>
               <span className={`text-sm font-medium flex-1 ${
-                active ? 'text-blue-700' : done ? 'text-green-700' : 'text-gray-400'
+                active ? 'text-blue-700' : done ? 'text-green-700' : 'text-[#8E8E93]/70'
               }`}>
                 {phase.label}
               </span>
@@ -155,8 +155,8 @@ export default function UploadProgressPage() {
       {/* Progress bar with shimmer */}
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 space-y-3">
         <div className="flex justify-between text-sm">
-          <span className="text-gray-500 truncate max-w-[200px]">{status.fileName}</span>
-          <span className="text-gray-400">{progress}%</span>
+          <span className="text-[#8E8E93] truncate max-w-[200px]">{status.fileName}</span>
+          <span className="text-[#8E8E93]/70">{progress}%</span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
           {isRunning ? (
@@ -181,7 +181,7 @@ export default function UploadProgressPage() {
           )}
         </div>
         {isRunning && (
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-[#8E8E93]/70 text-center">
             大文件解析需要一些时间，请耐心等待...
           </p>
         )}
@@ -220,7 +220,7 @@ export default function UploadProgressPage() {
       )}
 
       {status.status === 'ready' && (
-        <button onClick={handleDelete} className="w-full text-sm text-gray-400 hover:text-red-500 transition-colors py-2">
+        <button onClick={handleDelete} className="w-full text-sm text-[#8E8E93]/70 hover:text-red-500 transition-colors py-2">
           删除此上传数据
         </button>
       )}
