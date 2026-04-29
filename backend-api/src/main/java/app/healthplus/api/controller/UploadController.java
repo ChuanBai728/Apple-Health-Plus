@@ -6,6 +6,7 @@ import app.healthplus.domain.dto.CreateUploadResponse;
 import app.healthplus.domain.dto.UploadStatusResponse;
 import jakarta.validation.Valid;
 import java.util.UUID;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class UploadController {
     }
 
     @PostMapping("/{id}/complete")
+    @CacheEvict(value = {"overview", "metrics", "insight"}, allEntries = true)
     public UploadStatusResponse complete(@PathVariable("id") UUID id) {
         return uploadService.complete(id);
     }
