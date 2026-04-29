@@ -9,11 +9,11 @@ import Link from 'next/link';
 type TimeRange = 'all' | 'year' | 'month' | 'week';
 
 /* ── Side Panel ──────────────────────────────────── */
-function SidePanel({ insight, insightType, setInsightType, chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
+/* ── Left Report Panel ───────────────────────────── */
+function ReportPanel({ insight, insightType, setInsightType }: any) {
   return (
-    <aside className="w-[320px] shrink-0 space-y-4">
-      {/* Health Report */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 overflow-y-auto" style={{maxHeight:'calc(50vh - 60px)'}}>
+    <aside className="w-[300px] shrink-0">
+      <div className="sticky top-14 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4" style={{maxHeight:'calc(100vh - 80px)',overflowY:'auto'}}>
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-bold text-[#1C1C1E]">健康报告</span>
           <div className="flex gap-1 bg-[#F2F2F7] rounded-lg p-0.5">
@@ -23,7 +23,7 @@ function SidePanel({ insight, insightType, setInsightType, chatMsgs, chatInput, 
         </div>
         {insight?(<div className="space-y-3">
           <div className="text-xs text-[#8E8E93]">{insight.startDate}~{insight.endDate}</div>
-          <div className="space-y-1">{insight.highlights?.slice(0,6).map((h:any)=>{const up=h.changePct>0;return(
+          <div className="space-y-1">{insight.highlights?.slice(0,8).map((h:any)=>{const up=h.changePct>0;return(
             <div key={h.metricKey} className="flex items-center gap-2 bg-[#F2F2F7] rounded-lg px-2.5 py-1.5 text-xs">
               <span className="flex-1 text-[#3A3A3C]">{METRIC_LABELS[h.metricKey]||h.metricKey}</span>
               <span className="font-semibold">{h.weeklyAvg.toFixed(1)}{METRIC_UNITS[h.metricKey]||''}</span>
@@ -32,18 +32,24 @@ function SidePanel({ insight, insightType, setInsightType, chatMsgs, chatInput, 
           <div className="text-xs text-[#3A3A3C] leading-relaxed whitespace-pre-line">{insight.aiNarrative}</div>
         </div>):(<div className="text-center py-4 text-xs text-[#8E8E93]">加载中...</div>)}
       </div>
+    </aside>
+  );
+}
 
-      {/* AI Chat */}
-      <div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 flex flex-col" style={{height:'calc(50vh - 20px)'}}>
-        <div className="px-4 py-3 border-b border-black/5 text-sm font-bold text-[#1C1C1E]">AI 对话</div>
+/* ── Right Chat Panel ────────────────────────────── */
+function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
+  return (
+    <aside className="w-[300px] shrink-0">
+      <div className="sticky top-14 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 flex flex-col" style={{height:'calc(100vh - 80px)'}}>
+        <div className="px-4 py-3 border-b border-black/5 text-sm font-bold text-[#1C1C1E] shrink-0">AI 对话</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {chatMsgs.length===0&&(<div className="text-center py-6 space-y-2"><p className="text-xs text-[#8E8E93]">基于健康数据提问</p>
-          <div className="flex flex-wrap gap-1.5 justify-center">{['整体健康状态','睡眠质量','恢复状态','心率分析'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-2.5 py-1 bg-[#F2F2F7] hover:bg-black/[0.04] rounded-full text-xs text-[#3A3A3C]">{q}</button>))}</div></div>)}
+          {chatMsgs.length===0&&(<div className="text-center py-6 space-y-2"><p className="text-xs text-[#8E8E93]">基于你的健康数据提问</p>
+          <div className="flex flex-wrap gap-1.5 justify-center">{['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-2.5 py-1 bg-[#F2F2F7] hover:bg-black/[0.04] rounded-full text-xs text-[#3A3A3C]">{q}</button>))}</div></div>)}
           {chatMsgs.map((m:any,i:number)=>(<div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[85%] rounded-xl px-3 py-2 text-xs ${m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-[#E9E9EF] text-[#1C1C1E] rounded-bl-sm'}`}>{m.content}</div></div>))}
-          {chatLoading&&<div className="text-center text-xs text-[#8E8E93]">AI 中...</div>}
+          {chatLoading&&<div className="text-center text-xs text-[#8E8E93]">AI 分析中...</div>}
         </div>
-        <div className="p-2 border-t border-black/5 flex gap-1.5">
-          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入..." disabled={chatLoading} className="flex-1 px-3 py-1.5 bg-[#F2F2F7] rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
+        <div className="p-2 border-t border-black/5 flex gap-1.5 shrink-0">
+          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入问题..." disabled={chatLoading} className="flex-1 px-3 py-1.5 bg-[#F2F2F7] rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
           <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()} className="px-3 py-1.5 bg-[#007AFF] text-white rounded-full text-xs font-medium disabled:opacity-40">发送</button>
         </div>
       </div>
@@ -303,10 +309,8 @@ export default function OverviewPage() {
   if(!data) return <div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-[#007AFF] border-t-transparent rounded-full"/></div>;
 
   return (
-    <div className="flex gap-5 max-w-[1500px] mx-auto pb-10 px-2">
-      <SidePanel insight={insight} insightType={insightType} setInsightType={setInsightType}
-        chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput}
-        chatLoading={chatLoading} sendMsg={sendMsg} />
+    <div className="flex gap-4 mx-auto pb-10 px-2" style={{maxWidth:1700}}>
+      <ReportPanel insight={insight} insightType={insightType} setInsightType={setInsightType} />
       <div className="flex-1 min-w-0 space-y-5">
         {/* ── Top bar ── */}
         <div className="flex items-center gap-3">
@@ -364,6 +368,7 @@ export default function OverviewPage() {
         )}
       </div>
       </div>
+      <ChatPanel chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput} chatLoading={chatLoading} sendMsg={sendMsg} />
     </div>
   );
 }
