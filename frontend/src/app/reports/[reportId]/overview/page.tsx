@@ -49,21 +49,47 @@ function ReportPanel({ insight, insightType, setInsightType }: any) {
 /* ── Right Chat Panel ────────────────────────────── */
 function ChatPanel({ chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
   return (
-    <aside className="w-[300px] shrink-0">
-      <div className="sticky top-14 bg-white rounded-3xl border border-black/5 flex flex-col" style={{height:'calc(100vh - 80px)'}}>
-        <div className="px-4 py-3 border-b border-black/5 text-sm font-bold text-[#1C1C1E] shrink-0">AI 对话</div>
-        <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          {chatMsgs.length===0&&(<div className="text-center py-6 space-y-2"><p className="text-xs text-[#8E8E93]">基于你的健康数据提问</p>
-          <div className="flex flex-wrap gap-1.5 justify-center">{['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-2.5 py-1 bg-slate-100 hover:bg-black/[0.04] rounded-full text-xs text-slate-700">{q}</button>))}</div></div>)}
-          {chatMsgs.map((m:any,i:number)=>(<div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[85%] rounded-xl px-3 py-2 text-xs ${m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-[#E9E9EF] text-[#1C1C1E] rounded-bl-sm'}`}>{m.content}</div></div>))}
-          {chatLoading&&<div className="text-center text-xs text-[#8E8E93]">AI 分析中...</div>}
-        </div>
-        <div className="p-2 border-t border-black/5 flex gap-1.5 shrink-0">
-          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入问题..." disabled={chatLoading} className="flex-1 px-3 py-1.5 bg-slate-100 rounded-full text-xs focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
-          <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()} className="px-3 py-1.5 bg-[#007AFF] text-white rounded-full text-xs font-medium disabled:opacity-40">发送</button>
+    <div className="sticky top-14 bg-white rounded-3xl border border-transparent shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col" style={{height:'calc(100vh - 80px)'}}>
+      <div className="px-5 py-4 border-b border-slate-100 text-sm font-bold text-slate-900 shrink-0">AI 对话</div>
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+        {chatMsgs.length===0&&(
+          <div className="flex flex-col items-center justify-center h-full text-center space-y-5">
+            <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl">🤖</div>
+            <div>
+              <p className="text-sm font-semibold text-slate-700">健康智能助手</p>
+              <p className="text-xs text-slate-400 mt-1">基于你的数据，随时提问</p>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {['整体健康状态','睡眠质量如何','恢复状态怎么样','心率正常吗'].map(q=>(
+                <button key={q} onClick={()=>sendMsg(q)}
+                  className="px-4 py-2 bg-slate-50 hover:bg-slate-100 rounded-xl text-xs text-slate-600 transition-colors">{q}</button>
+              ))}
+            </div>
+          </div>
+        )}
+        {chatMsgs.map((m:any,i:number)=>(
+          <div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}>
+            <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+              m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-slate-100 text-slate-700 rounded-bl-sm'
+            }`}>{m.content}</div>
+          </div>
+        ))}
+        {chatLoading&&<div className="flex items-center gap-2 text-xs text-slate-400 px-2">
+          <div className="animate-spin h-3 w-3 border-2 border-slate-300 border-t-slate-500 rounded-full"/>思考中...</div>}
+      </div>
+      <div className="px-3 pb-3 pt-2 border-t border-slate-100 shrink-0 backdrop-blur-md bg-white/80 rounded-b-3xl">
+        <div className="flex gap-2 items-center bg-slate-100 rounded-full px-4 py-1.5">
+          <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)}
+            onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)}
+            placeholder="输入问题..." disabled={chatLoading}
+            className="flex-1 bg-transparent text-sm text-slate-700 placeholder-slate-400 focus:outline-none"/>
+          <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()}
+            className="w-8 h-8 flex items-center justify-center bg-[#007AFF] text-white rounded-full disabled:opacity-40 hover:bg-[#0077EE] transition-colors shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 5 19 12"/></svg>
+          </button>
         </div>
       </div>
-    </aside>
+    </div>
   );
 }
 
