@@ -176,25 +176,28 @@ function SnapshotCard({ card, id }: { card: any; id: string }) {
 
   return (
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
-      className="col-span-1 row-span-1 bg-white rounded-3xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all group flex flex-col justify-between min-h-[140px]">
+      className="col-span-1 row-span-1 bg-white rounded-3xl border border-transparent p-5 hover:-translate-y-1 hover:shadow-lg hover:border-slate-200 transition-all duration-300 group flex flex-col justify-between min-h-[150px]">
       <div>
         <div className="flex items-start justify-between">
-          <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em] leading-tight">{l}</p>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.1em] leading-tight">{l}</p>
           {card.anomaly && <span className="w-[6px] h-[6px] bg-[#FF9500] rounded-full shrink-0 mt-0.5"/>}
         </div>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[28px] font-extrabold text-[#1C1C1E] tabular-nums leading-none">
+          <span className="text-[32px] font-extrabold text-slate-900 tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-xs text-[#8E8E93] font-medium">{u}</span>
+          <span className="text-xs text-slate-400 font-medium">{u}</span>
         </div>
         {card.trend30d!=null && (
-          <span className={`inline-block text-xs font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>
+          <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${
+            tr.includes('emerald')?'bg-emerald-100/50 text-emerald-700':
+            tr.includes('rose')?'bg-rose-100/50 text-rose-700':
+            'bg-slate-100 text-slate-500'}`}>
             {card.trend30d>0?'↑':card.trend30d<0?'↓':'→'} {Math.abs(card.trend30d).toFixed(1)}
           </span>
         )}
       </div>
-      <div className="h-7 mt-1"><SvgSparkline points={pts} color="#cbd5e1"/></div>
+      <div className="h-8 mt-1"><SvgSparkline points={pts} color="#cbd5e1"/></div>
     </Link>
   );
 }
@@ -210,18 +213,21 @@ function TrendCard({ card, id }: { card: any; id: string }) {
 
   return (
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
-      className="col-span-2 row-span-1 bg-white rounded-3xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all flex items-center gap-6 min-h-[100px]">
-      <div className="shrink-0 min-w-[130px]">
-        <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em]">{l}</p>
+      className="col-span-2 row-span-1 bg-white rounded-3xl border border-transparent p-5 hover:-translate-y-1 hover:shadow-lg hover:border-slate-200 transition-all duration-300 flex items-center gap-6 min-h-[120px]">
+      <div className="shrink-0 min-w-[140px]">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.1em]">{l}</p>
         <div className="flex items-baseline gap-1 mt-1">
-          <span className="text-[28px] font-extrabold text-[#1C1C1E] tabular-nums leading-none">
+          <span className="text-[32px] font-extrabold text-slate-900 tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-xs text-[#8E8E93] font-medium">{u}</span>
+          <span className="text-xs text-slate-400 font-medium">{u}</span>
         </div>
-        {card.trend30d!=null&&<span className={`inline-block text-xs font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>{card.trend30d>0?'↑':'↓'} {Math.abs(card.trend30d).toFixed(1)}</span>}
+        {card.trend30d!=null&&<span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mt-1 ${
+          tr.includes('emerald')?'bg-emerald-100/50 text-emerald-700':
+          tr.includes('rose')?'bg-rose-100/50 text-rose-700':
+          'bg-slate-100 text-slate-500'}`}>{card.trend30d>0?'↑':'↓'} {Math.abs(card.trend30d).toFixed(1)}</span>}
       </div>
-      <div className="flex-1 h-12"><SvgSparkline points={pts} w={280} h={48} color={sc}/></div>
+      <div className="flex-1 h-12"><SvgSparkline points={pts} w={300} h={48} color={sc}/></div>
     </Link>
   );
 }
