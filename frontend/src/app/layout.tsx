@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </a>
             </div>
           </header>
-          <main className="flex-1 max-w-[960px] mx-auto w-full px-4 py-6">
+          <main className="flex-1 w-full">
             {children}
           </main>
         </Providers>
