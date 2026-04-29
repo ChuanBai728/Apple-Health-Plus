@@ -63,7 +63,7 @@ export default function HeatmapPage() {
               />
             ))}
           </div>
-          <div className="flex items-center justify-end gap-1 mt-3 text-[10px] text-gray-400">
+          <div className="flex items-center justify-end gap-1 mt-3 text-xs text-gray-400">
             <span>少</span>
             <span className="w-3 h-3 rounded-sm bg-green-100" />
             <span className="w-3 h-3 rounded-sm bg-green-300" />

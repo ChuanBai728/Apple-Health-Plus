@@ -25,13 +25,13 @@ export function MetricCard({ card, reportId, category }: { card: OverviewCard; r
       <div className="p-3">
         <div className="flex items-center justify-between">
           <span className="text-xs font-medium text-[#8E8E93]">{label}</span>
-          {card.anomaly && <span className="text-[10px] bg-[#FF9500]/10 text-[#FF9500] px-1.5 py-0.5 rounded-full font-medium">异常</span>}
+          {card.anomaly && <span className="text-xs bg-[#FF9500]/10 text-[#FF9500] px-1.5 py-0.5 rounded-full font-medium">异常</span>}
         </div>
         <div className="mt-1 flex items-baseline gap-1">
           <span className="text-xl font-bold text-[#1C1C1E]">
             {card.latest != null ? card.latest.toFixed(1) : '--'}
           </span>
-          {unit && <span className="text-[10px] text-[#8E8E93]/70">{unit}</span>}
+          {unit && <span className="text-xs text-[#8E8E93]/70">{unit}</span>}
         </div>
         {trend != null && (
           <span className={`text-[11px] font-medium ${trendColor}`}>

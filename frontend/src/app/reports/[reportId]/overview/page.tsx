@@ -11,7 +11,7 @@ type TimeRange = 'all' | 'year' | 'month' | 'week';
 /* ── Sparkline ───────────────────────────────────── */
 function SvgSparkline({ points, w = 80, h = 28, color = '#8E8E93' }: { points: (number|null)[]; w?: number; h?: number; color?: string }) {
   const vals = points.filter((v): v is number => v != null);
-  if (vals.length < 2) return <div className="text-gray-300 text-[10px]">—</div>;
+  if (vals.length < 2) return <div className="text-gray-300 text-xs">—</div>;
   const min = Math.min(...vals), max = Math.max(...vals);
   const range = max - min || 1;
   const p = 2, pw = w - p*2, ph = h - p*2;
@@ -52,11 +52,11 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
       <div className="flex items-center justify-between my-3">
         {/* Left: step count */}
         <div className="text-center min-w-[100px]">
-          <div className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-wider">今日步数</div>
+          <div className="text-xs font-semibold text-[#8E8E93] uppercase tracking-wider">今日步数</div>
           <div className="text-4xl font-extrabold text-[#1C1C1E] tabular-nums leading-none mt-1">
             {steps?.latest != null ? Math.round(steps.latest).toLocaleString() : '—'}
           </div>
-          <div className="text-[10px] text-[#8E8E93] mt-1">目标 {stepGoal.toLocaleString()}</div>
+          <div className="text-xs text-[#8E8E93] mt-1">目标 {stepGoal.toLocaleString()}</div>
           <div className="mt-2 mx-auto max-w-[120px] bg-black/[0.06] rounded-full h-1.5 overflow-hidden">
             <div className="bg-gradient-to-r from-[#FF9500] to-[#FF3B30] h-full rounded-full"
               style={{width: `${Math.min((steps?.latest??0)/stepGoal*100, 100)}%`}} />
@@ -81,7 +81,7 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
                 strokeDasharray={`${standPct * 0.75 * 100} ${75 - standPct * 0.75 * 100}`} strokeLinecap="round"/>
             </svg>
           </div>
-          <div className="text-[10px] text-[#8E8E93] leading-relaxed">
+          <div className="text-xs text-[#8E8E93] leading-relaxed">
             <div><span className="inline-block w-2 h-2 rounded-full bg-[#FF3B30] mr-1.5"/>活动 {energy?.latest??'—'} kcal</div>
             <div><span className="inline-block w-2 h-2 rounded-full bg-[#34C759] mr-1.5"/>锻炼 {workout?.latest??'—'} min</div>
             <div><span className="inline-block w-2 h-2 rounded-full bg-[#007AFF] mr-1.5"/>站立 10 h</div>
@@ -92,20 +92,20 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
       {/* Bottom: 4-column vitals */}
       <div className="grid grid-cols-4 gap-2 mb-3">
         <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
-          <div className="text-[9px] text-[#8E8E93]">心率</div>
-          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{rhr?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> bpm</span></div>
+          <div className="text-sm text-[#8E8E93]">心率</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{rhr?.latest??'—'}<span className="text-sm font-normal text-[#8E8E93]"> bpm</span></div>
         </div>
         <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
-          <div className="text-[9px] text-[#8E8E93]">HRV</div>
-          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{hrv?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> ms</span></div>
+          <div className="text-sm text-[#8E8E93]">HRV</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{hrv?.latest??'—'}<span className="text-sm font-normal text-[#8E8E93]"> ms</span></div>
         </div>
         <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
-          <div className="text-[9px] text-[#8E8E93]">运动</div>
-          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{workout?.latest??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> min</span></div>
+          <div className="text-sm text-[#8E8E93]">运动</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{workout?.latest??'—'}<span className="text-sm font-normal text-[#8E8E93]"> min</span></div>
         </div>
         <div className="bg-black/[0.02] rounded-xl p-2.5 text-center">
-          <div className="text-[9px] text-[#8E8E93]">睡眠</div>
-          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{sleep?.latest?.toFixed(1)??'—'}<span className="text-[9px] font-normal text-[#8E8E93]"> h</span></div>
+          <div className="text-sm text-[#8E8E93]">睡眠</div>
+          <div className="text-base font-bold text-[#1C1C1E] tabular-nums">{sleep?.latest?.toFixed(1)??'—'}<span className="text-sm font-normal text-[#8E8E93]"> h</span></div>
         </div>
       </div>
 
@@ -136,17 +136,17 @@ function SnapshotCard({ card, id }: { card: any; id: string }) {
       className="col-span-1 row-span-1 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all group flex flex-col justify-between min-h-[140px]">
       <div>
         <div className="flex items-start justify-between">
-          <p className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-[0.1em] leading-tight">{l}</p>
+          <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em] leading-tight">{l}</p>
           {card.anomaly && <span className="w-[6px] h-[6px] bg-[#FF9500] rounded-full shrink-0 mt-0.5"/>}
         </div>
         <div className="flex items-baseline gap-1 mt-1">
           <span className="text-[28px] font-extrabold text-[#1C1C1E] tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-[10px] text-[#8E8E93] font-medium">{u}</span>
+          <span className="text-xs text-[#8E8E93] font-medium">{u}</span>
         </div>
         {card.trend30d!=null && (
-          <span className={`inline-block text-[10px] font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>
+          <span className={`inline-block text-xs font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>
             {card.trend30d>0?'↑':card.trend30d<0?'↓':'→'} {Math.abs(card.trend30d).toFixed(1)}
           </span>
         )}
@@ -169,14 +169,14 @@ function TrendCard({ card, id }: { card: any; id: string }) {
     <Link href={`/reports/${id}/metrics/${card.metricKey}`}
       className="col-span-2 row-span-1 bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-4 hover:border-black/10 hover:shadow-md transition-all flex items-center gap-6 min-h-[100px]">
       <div className="shrink-0 min-w-[130px]">
-        <p className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-[0.1em]">{l}</p>
+        <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-[0.1em]">{l}</p>
         <div className="flex items-baseline gap-1 mt-1">
           <span className="text-[28px] font-extrabold text-[#1C1C1E] tabular-nums leading-none">
             {v!=null?(Number.isInteger(v)?v:v.toFixed(1)):'—'}
           </span>
-          <span className="text-[10px] text-[#8E8E93] font-medium">{u}</span>
+          <span className="text-xs text-[#8E8E93] font-medium">{u}</span>
         </div>
-        {card.trend30d!=null&&<span className={`inline-block text-[10px] font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>{card.trend30d>0?'↑':'↓'} {Math.abs(card.trend30d).toFixed(1)}</span>}
+        {card.trend30d!=null&&<span className={`inline-block text-xs font-semibold mt-0.5 px-1.5 py-0.5 rounded-md ${tr.includes('emerald')?'bg-[#34C759]/10 text-[#34C759]':tr.includes('rose')?'bg-[#FF3B30]/10 text-[#FF3B30]':'bg-black/5 text-[#8E8E93]'}`}>{card.trend30d>0?'↑':'↓'} {Math.abs(card.trend30d).toFixed(1)}</span>}
       </div>
       <div className="flex-1 h-12"><SvgSparkline points={pts} w={280} h={48} color={sc}/></div>
     </Link>
@@ -260,9 +260,9 @@ export default function OverviewPage() {
       {/* ── Anomaly alert ── */}
       {anomalyCards.length>0 && (
         <div className="bg-[#FFFBF5] border border-[#FF9500]/15 rounded-2xl px-5 py-3 flex items-center gap-3">
-          <span className="text-[11px] font-bold text-[#FF9500] shrink-0">⚠ {anomalyCards.length} 项异常</span>
+          <span className="text-sm font-bold text-[#FF9500] shrink-0">⚠ {anomalyCards.length} 项异常</span>
           <div className="flex gap-1.5 flex-wrap">
-            {anomalyCards.map(c=><Link key={c.metricKey} href={`/reports/${reportId}/metrics/${c.metricKey}`} className="px-2.5 py-0.5 bg-white border border-[#FF9500]/20 rounded-full text-[10px] text-[#FF9500] hover:bg-[#FF9500]/5 transition-colors">{METRIC_LABELS[c.metricKey]||c.metricKey}</Link>)}
+            {anomalyCards.map(c=><Link key={c.metricKey} href={`/reports/${reportId}/metrics/${c.metricKey}`} className="px-2.5 py-0.5 bg-white border border-[#FF9500]/20 rounded-full text-xs text-[#FF9500] hover:bg-[#FF9500]/5 transition-colors">{METRIC_LABELS[c.metricKey]||c.metricKey}</Link>)}
           </div>
         </div>
       )}

@@ -34,7 +34,7 @@ export function ChatBubble({ msg }: { msg: ChatHistoryMessage }) {
           </div>
         )}
         {!isUser && msg.disclaimer && (
-          <p className="mt-2 text-[10px] text-[#8E8E93]/70 italic">{msg.disclaimer}</p>
+          <p className="mt-2 text-xs text-[#8E8E93]/70 italic">{msg.disclaimer}</p>
         )}
       </div>
     </div>
