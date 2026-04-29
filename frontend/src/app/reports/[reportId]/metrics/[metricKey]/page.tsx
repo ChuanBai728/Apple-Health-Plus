@@ -47,7 +47,7 @@ function MetricContent() {
             {lp.baselineAvg30d != null ? `，偏离 30 天基线 ${lp.baselineAvg30d.toFixed(1)}${unit}` : ''}
             （超过 2.5 倍标准差）
           </p>
-          <div className="flex gap-4 text-xs text-[#8E8E93]">
+          <div className="flex gap-4 text-sm text-[#8E8E93]">
             {lp.trendDelta7d != null && (
               <span>较 7 天前: <span className={lp.trendDelta7d > 0 ? 'text-[#FF3B30]' : 'text-[#34C759]'}>
                 {lp.trendDelta7d > 0 ? '+' : ''}{lp.trendDelta7d.toFixed(1)}{unit}</span></span>
@@ -93,7 +93,7 @@ function MetricContent() {
       </div>
 
       <select value={compare} onChange={e => setCompare(e.target.value)}
-        className="text-xs border border-gray-200 rounded-lg px-2 py-1.5 w-40 focus:ring-1 focus:ring-blue-500">
+        className="text-sm border border-gray-200 rounded-lg px-2 py-1.5 w-40 focus:ring-1 focus:ring-blue-500">
         <option value="">不对比</option>
         {COMPARE_OPTIONS.filter(m => m !== metricKey).map(m => <option key={m} value={m}>{METRIC_LABELS[m] || m}</option>)}
       </select>
@@ -112,9 +112,9 @@ function MetricContent() {
               {label:'平均',value:avg},{label:'最高',value:Math.max(...values)},{label:'最低',value:Math.min(...values)}
             ].map((s,i) => (
               <div key={s.label} className={`bg-white rounded-xl border border-gray-200 border-l-4 ${STAT_COLORS[i]} p-4`}>
-                <div className="text-xs text-gray-400 uppercase">{s.label}</div>
+                <div className="text-sm text-[#8E8E93] uppercase font-medium">{s.label}</div>
                 <div className="text-2xl font-extrabold text-[#1C1C1E] mt-1">{s.value.toFixed(1)}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{unit}</div>
+                <div className="text-sm text-[#8E8E93] mt-0.5">{unit}</div>
               </div>
             ));
           })()}

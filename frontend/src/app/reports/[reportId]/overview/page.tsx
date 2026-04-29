@@ -1,12 +1,59 @@
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { getOverview } from '@/lib/api';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useParams } from 'next/navigation';
+import { getOverview, getInsight, sendChatMessage } from '@/lib/api';
 import { OverviewResponse, METRIC_LABELS, METRIC_UNITS, isHiddenMetric, getTrendColor, getCategory, catLabel } from '@/lib/types';
 import Link from 'next/link';
 
 type TimeRange = 'all' | 'year' | 'month' | 'week';
+type SidePanel = 'report' | 'chat' | null;
+
+/* ── Side Panel ──────────────────────────────────── */
+function SidePanel({ panel, setPanel, reportId, insight, insightType, setInsightType, chatMsgs, chatInput, setChatInput, chatLoading, sendMsg }: any) {
+  return (
+    <aside className="w-[360px] shrink-0">
+      <div className="sticky top-14 space-y-4">
+        <div className="flex gap-1 bg-[#F2F2F7] rounded-xl p-1">
+          <button onClick={()=>setPanel(panel==='report'?null:'report')}
+            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition ${panel==='report'?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93]'}`}>健康报告</button>
+          <button onClick={()=>setPanel(panel==='chat'?null:'chat')}
+            className={`flex-1 py-2 text-sm font-semibold rounded-lg transition ${panel==='chat'?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93]'}`}>AI 对话</button>
+        </div>
+        {panel==='report'&&(<div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 p-5 max-h-[calc(100vh-140px)] overflow-y-auto space-y-4">
+          <div className="flex gap-1 bg-[#F2F2F7] rounded-lg p-0.5 w-fit">
+            {(['weekly','monthly']as const).map(t=>(<button key={t} onClick={()=>setInsightType(t)}
+              className={`px-3 py-1 text-xs rounded-md font-medium transition ${insightType===t?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93]'}`}>{t==='weekly'?'周报':'月报'}</button>))}
+          </div>
+          {insight?(<>
+            <div className="text-center"><div className="text-lg font-extrabold text-[#1C1C1E]">{insightType==='weekly'?'健康周报':'健康月报'}</div>
+            <div className="text-xs text-[#8E8E93]">{insight.startDate}~{insight.endDate}</div></div>
+            <div><div className="text-sm font-bold text-[#1C1C1E] mb-2">核心指标</div>
+            <div className="space-y-1">{insight.highlights?.map((h:any)=>{const up=h.changePct>0;return(
+              <div key={h.metricKey} className="flex items-center gap-2 bg-[#F2F2F7] rounded-lg px-3 py-2 text-sm">
+                <span className="flex-1 text-[#3A3A3C]">{METRIC_LABELS[h.metricKey]||h.metricKey}</span>
+                <span className="font-semibold">{h.weeklyAvg.toFixed(1)}{METRIC_UNITS[h.metricKey]||''}</span>
+                <span className={`text-xs font-bold px-1.5 py-0.5 rounded ${up?'bg-[#34C759]/10 text-[#34C759]':'bg-[#FF3B30]/10 text-[#FF3B30]'}`}>{h.trend}{Math.abs(h.changePct).toFixed(0)}%</span>
+              </div>);})}</div></div>
+            <div className="text-sm text-[#3A3A3C] leading-relaxed whitespace-pre-line">{insight.aiNarrative}</div>
+          </>):(<div className="text-center py-8 text-sm text-[#8E8E93]">加载中...</div>)}
+        </div>)}
+        {panel==='chat'&&(<div className="bg-white/70 backdrop-blur-xl rounded-2xl border border-black/5 flex flex-col" style={{height:'calc(100vh - 180px)'}}>
+          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            {chatMsgs.length===0&&(<div className="text-center py-8 space-y-3"><div className="text-2xl">AI</div><p className="text-sm text-[#8E8E93]">基于你的健康数据提问</p>
+            <div className="flex flex-wrap gap-2 justify-center">{['分析整体健康状态','睡眠质量如何','恢复状态怎么样'].map(q=>(<button key={q} onClick={()=>sendMsg(q)} className="px-3 py-1.5 bg-[#F2F2F7] hover:bg-black/[0.04] rounded-full text-xs text-[#3A3A3C]">{q}</button>))}</div></div>)}
+            {chatMsgs.map((m:any,i:number)=>(<div key={i} className={`flex ${m.role==='user'?'justify-end':'justify-start'}`}><div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm ${m.role==='user'?'bg-[#007AFF] text-white rounded-br-sm':'bg-[#E9E9EF] text-[#1C1C1E] rounded-bl-sm'}`}>{m.content}</div></div>))}
+            {chatLoading&&<div className="text-center text-sm text-[#8E8E93]">AI 分析中...</div>}
+          </div>
+          <div className="p-3 border-t border-black/5 flex gap-2">
+            <input value={chatInput} onChange={e=>setChatInput((e.target as HTMLInputElement).value)} onKeyDown={e=>e.key==='Enter'&&sendMsg(chatInput)} placeholder="输入问题..." disabled={chatLoading} className="flex-1 px-4 py-2 bg-[#F2F2F7] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"/>
+            <button onClick={()=>sendMsg(chatInput)} disabled={chatLoading||!chatInput.trim()} className="px-4 py-2 bg-[#007AFF] text-white rounded-full text-sm font-medium disabled:opacity-40">发送</button>
+          </div>
+        </div>)}
+      </div>
+    </aside>
+  );
+}
 
 /* ── Sparkline ───────────────────────────────────── */
 function SvgSparkline({ points, w = 80, h = 28, color = '#8E8E93' }: { points: (number|null)[]; w?: number; h?: number; color?: string }) {
@@ -114,10 +161,6 @@ function HeroCard({ data, range, onRange, id }: { data: OverviewResponse; range:
         <div className="flex gap-1 bg-black/[0.04] rounded-full p-0.5">
           {(['week','month','year','all'] as TimeRange[]).map(r=><button key={r} onClick={()=>onRange(r)} className={`px-3.5 py-1.5 text-xs rounded-full font-semibold transition ${range===r?'bg-white text-[#1C1C1E] shadow-sm':'text-[#8E8E93] hover:text-[#3A3A3C] hover:bg-black/[0.02]'}`}>{ {week:'周',month:'月',year:'年',all:'全部'}[r]}</button>)}
         </div>
-        <Link href={`/reports/${id}/report`}
-          className="ml-auto px-4 py-1.5 bg-black/[0.02] hover:bg-black/[0.04] text-[#007AFF] rounded-full text-xs font-semibold transition flex items-center gap-1.5 border border-black/5">
-          📋 AI 健康报告
-        </Link>
       </div>
     </div>
   );
@@ -207,8 +250,28 @@ export default function OverviewPage() {
   const [error, setError] = useState('');
   const [range, setRange] = useState<TimeRange>('all');
   const [showAll, setShowAll] = useState(false);
+  const [sidePanel, setSidePanel] = useState<SidePanel>(null);
+  const [insight, setInsight] = useState<any>(null);
+  const [insightType, setInsightType] = useState<'weekly'|'monthly'>('weekly');
+  const [chatMsgs, setChatMsgs] = useState<{role:string;content:string}[]>([]);
+  const [chatInput, setChatInput] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
 
   useEffect(() => { getOverview(reportId).then(setData).catch(e=>setError(e.message)); }, [reportId]);
+  useEffect(() => {
+    if (sidePanel === 'report') getInsight(reportId, insightType).then(setInsight).catch(()=>{});
+  }, [reportId, insightType, sidePanel]);
+
+  const sendMsg = useCallback(async (q: string) => {
+    if (!q.trim() || chatLoading) return;
+    setChatMsgs(p=>[...p,{role:'user',content:q}]); setChatInput(''); setChatLoading(true);
+    try {
+      const h=reportId.replace(/-/g,'').substring(0,12).padEnd(32,'0');
+      const sid=h.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/,'$1-$2-$3-$4-$5');
+      const r=await sendChatMessage(sid,{question:q,uploadId:reportId});
+      setChatMsgs(p=>[...p,{role:'assistant',content:r.conclusion}]);
+    } catch {} finally { setChatLoading(false); }
+  }, [reportId, chatLoading]);
 
   const visible = useMemo(() => data?.cards.filter(c=>!isHiddenMetric(c.metricKey))??[], [data]);
 
@@ -245,17 +308,18 @@ export default function OverviewPage() {
   if(!data) return <div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-[#007AFF] border-t-transparent rounded-full"/></div>;
 
   return (
-    <div className="space-y-5 max-w-[960px] mx-auto pb-10">
-      {/* ── Top bar ── */}
-      <div className="flex items-center gap-3">
-        <Link href="/" className="text-xs font-medium text-[#007AFF] hover:underline transition-colors">← 首页</Link>
-        <div className="flex-1"/>
-        <Link href={`/reports/${reportId}/chat`}
-          className="px-5 py-2.5 bg-[#007AFF] text-white rounded-full text-sm font-bold hover:bg-[#0077EE] transition-all shadow-md shadow-[#007AFF]/20 flex items-center gap-1.5">
-          🤖 AI 对话
-        </Link>
-        <Link href={`/reports/${reportId}/heatmap`} className="px-3.5 py-2 bg-white/70 backdrop-blur-xl border border-black/5 rounded-full text-xs font-medium hover:bg-black/[0.02] transition-colors">🗓 热力图</Link>
-      </div>
+    <div className="flex gap-5 max-w-[1300px] mx-auto pb-10">
+      <SidePanel panel={sidePanel} setPanel={setSidePanel} reportId={reportId}
+        insight={insight} insightType={insightType} setInsightType={setInsightType}
+        chatMsgs={chatMsgs} chatInput={chatInput} setChatInput={setChatInput}
+        chatLoading={chatLoading} sendMsg={sendMsg} />
+      <div className="flex-1 min-w-0 space-y-5">
+        {/* ── Top bar ── */}
+        <div className="flex items-center gap-3">
+          <Link href="/" className="text-xs font-medium text-[#007AFF] hover:underline transition-colors">← 首页</Link>
+          <div className="flex-1"/>
+          <Link href={`/reports/${reportId}/heatmap`} className="px-3.5 py-2 bg-white/70 backdrop-blur-xl border border-black/5 rounded-full text-xs font-medium hover:bg-black/[0.02] transition-colors">🗓 热力图</Link>
+        </div>
 
       {/* ── Anomaly alert ── */}
       {anomalyCards.length>0 && (
@@ -304,6 +368,7 @@ export default function OverviewPage() {
             ))}
           </div>
         )}
+      </div>
       </div>
     </div>
   );
