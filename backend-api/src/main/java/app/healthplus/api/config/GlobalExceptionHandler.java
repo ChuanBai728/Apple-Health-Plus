@@ -46,12 +46,15 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
+    private static final Map<String, String> FIELD_CN = Map.of(
+            "username", "用户名", "password", "密码", "email", "邮箱");
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         String message = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .map(e -> FIELD_CN.getOrDefault(e.getField(), e.getField()) + ": " + e.getDefaultMessage())
                 .reduce((a, b) -> a + "; " + b)
-                .orElse("Validation failed");
+                .orElse("验证失败");
         log.warn("Validation error: {}", message);
         return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
