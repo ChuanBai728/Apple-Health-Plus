@@ -27,8 +27,8 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
     },
   });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err || `HTTP ${res.status}`);
+    const text = await res.text();
+    try { const json = JSON.parse(text); throw new Error(json.message || text); } catch { throw new Error(text || `HTTP ${res.status}`); }
   }
   return res.json();
 }

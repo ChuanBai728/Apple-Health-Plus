@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
                 .reduce((a, b) -> a + "; " + b)
                 .orElse("Validation failed");
         log.warn("Validation error: {}", message);
-        return buildResponse(HttpStatus.BAD_REQUEST, "请检查输入信息");
+        return buildResponse(HttpStatus.BAD_REQUEST, message);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
