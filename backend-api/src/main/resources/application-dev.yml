@@ -14,7 +14,7 @@ spring:
       host: localhost
       port: 16379
   cache:
-    type: redis
+    type: none
 app:
   storage:
     root: ../local-storage

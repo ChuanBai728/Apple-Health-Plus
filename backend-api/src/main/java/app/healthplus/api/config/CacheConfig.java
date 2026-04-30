@@ -21,6 +21,7 @@ import java.util.Map;
 
 @Configuration
 @EnableCaching
+@org.springframework.context.annotation.Profile("!dev")
 public class CacheConfig {
 
     @Bean
