@@ -33,7 +33,6 @@ public class ConversationMemory {
     private final StringRedisTemplate redis;
     private final ChatClient chatClient;
     private final ObjectMapper mapper = new ObjectMapper();
-
     public ConversationMemory(StringRedisTemplate redis, ChatClient.Builder cb) {
         this.redis = redis;
         this.chatClient = cb.build();

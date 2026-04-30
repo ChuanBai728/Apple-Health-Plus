@@ -8,7 +8,6 @@ import app.healthplus.domain.dto.MetricSeriesResponse;
 import app.healthplus.domain.dto.OverviewResponse;
 import java.util.*;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,14 +23,12 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}/overview")
-    @PreAuthorize("isAuthenticated()")
     @Cacheable(value = "overview", key = "#reportId", unless = "#result == null")
     public OverviewResponse getOverview(@PathVariable("reportId") UUID reportId) {
         return reportQueryService.getOverview(reportId);
     }
 
     @GetMapping("/{reportId}/metrics/{metricKey}")
-    @PreAuthorize("isAuthenticated()")
     @Cacheable(value = "metrics", key = "#reportId + '_' + #metricKey + '_' + #granularity", unless = "#result == null")
     public MetricSeriesResponse getMetric(@PathVariable("reportId") UUID reportId,
             @PathVariable("metricKey") String metricKey,
@@ -45,7 +42,6 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}/insight")
-    @PreAuthorize("isAuthenticated()")
     @Cacheable(value = "insight", key = "#reportId + '_' + #type", unless = "#result == null", sync = true)
     public ReportService.ReportData getInsight(@PathVariable("reportId") UUID reportId,
             @RequestParam(name = "type", defaultValue = "weekly") String type) {
@@ -53,7 +49,6 @@ public class ReportController {
     }
 
     @GetMapping("/{reportId}/states")
-    @PreAuthorize("isAuthenticated()")
     public Map<String,Object> getStates(@PathVariable("reportId") UUID reportId) {
         Map<String,Long> dist = classifier.getStateDistribution(reportId.toString());
         Map<String,Object> result = new LinkedHashMap<>();
