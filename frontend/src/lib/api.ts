@@ -8,11 +8,21 @@ import {
   ChatSessionResponse,
 } from './types';
 
+export interface LoginRequest { username: string; password: string; }
+export interface RegisterRequest { username: string; email: string; password: string; }
+export interface AuthResponse { token: string; tokenType: string; userId: string; username: string; role: string; }
+
+function getJwtHeader(): Record<string, string> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('hp-auth-token') : null;
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...getJwtHeader(),
       ...((options?.headers as Record<string, string>) || {}),
     },
   });
@@ -40,6 +50,8 @@ export async function createUploadWithProgress(
     form.append('file', file);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', `${BACKEND}/api/v1/uploads`);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('hp-auth-token') : null;
+    if (token) xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     xhr.upload.addEventListener('progress', (e) => {
       if (e.lengthComputable) {
         onProgress({ loaded: e.loaded, total: e.total, percent: Math.round((e.loaded / e.total) * 100) });
@@ -123,4 +135,14 @@ export async function sendChatMessage(
     method: 'POST',
     body: JSON.stringify(data),
   });
+}
+
+// ── Auth ──
+
+export async function login(data: LoginRequest): Promise<AuthResponse> {
+  return request('/api/v1/auth/login', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export async function register(data: RegisterRequest): Promise<AuthResponse> {
+  return request('/api/v1/auth/register', { method: 'POST', body: JSON.stringify(data) });
 }

@@ -2,11 +2,23 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUploadWithProgress, completeUpload, loadDemo } from '@/lib/api';
+import { createUploadWithProgress, completeUpload, loadDemo, login, register } from '@/lib/api';
+import type { AuthResponse } from '@/lib/api';
 
 function formatSize(bytes: number) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
+function getUser(): AuthResponse | null {
+  try { const r = localStorage.getItem('hp-auth-user'); return r ? JSON.parse(r) : null; } catch { return null; }
+}
+function saveAuth(a: AuthResponse) {
+  localStorage.setItem('hp-auth-token', a.token);
+  localStorage.setItem('hp-auth-user', JSON.stringify(a));
+}
+function clearAuth() {
+  localStorage.removeItem('hp-auth-token'); localStorage.removeItem('hp-auth-user');
 }
 
 export default function HomePage() {
@@ -17,6 +29,22 @@ export default function HomePage() {
   const [progress, setProgress] = useState({ loaded: 0, total: 0, percent: 0 });
   const [phase, setPhase] = useState<'idle' | 'uploading' | 'processing'>('idle');
   const [error, setError] = useState('');
+  const [authUser, setAuthUser] = useState<AuthResponse | null>(getUser());
+  const [authMode, setAuthMode] = useState<'login' | 'register' | null>(null);
+  const [authForm, setAuthForm] = useState({ username: '', password: '', email: '' });
+  const [authError, setAuthError] = useState('');
+
+  const handleAuth = async () => {
+    setAuthError('');
+    try {
+      const fn = authMode === 'register' ? register : login;
+      const result = await fn({ username: authForm.username, password: authForm.password, email: authForm.email });
+      saveAuth(result);
+      setAuthUser(result);
+      setAuthMode(null);
+      setAuthForm({ username: '', password: '', email: '' });
+    } catch (e: any) { setAuthError(e.message || '认证失败'); }
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -28,6 +56,7 @@ export default function HomePage() {
   };
 
   const handleUpload = useCallback(async () => {
+    if (!authUser) { setAuthMode('login'); return; }
     if (!file) { setError('请选择文件'); return; }
     setUploading(true);
     setError('');
@@ -77,7 +106,24 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#F5F5F7] via-white to-[#F5F5F7]">
-    <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24">
+    <div className="max-w-7xl mx-auto px-6 py-16 lg:py-24 relative">
+      {/* Auth bar — top right */}
+      <div className="absolute top-6 right-6 flex items-center gap-3">
+        {authUser ? (
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-slate-500">{authUser.username}</span>
+            <button onClick={() => { clearAuth(); setAuthUser(null); }}
+              className="text-xs text-slate-400 hover:text-slate-600 transition-colors">退出</button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button onClick={() => { setAuthMode('login'); setAuthError(''); }}
+              className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">登录</button>
+            <button onClick={() => { setAuthMode('register'); setAuthError(''); }}
+              className="px-4 py-2 text-sm font-medium bg-[#3A7BFF] text-white rounded-full hover:bg-[#2B6AE8] transition-all">注册</button>
+          </div>
+        )}
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
         {/* ── Left Column: Brand + Features ── */}
@@ -219,6 +265,45 @@ export default function HomePage() {
       <p className="text-center text-sm text-slate-400 max-w-md mx-auto mt-16 tracking-wide">
         你的健康数据仅用于本次分析，不会与第三方共享。本产品不提供医疗诊断，AI 分析仅供参考。
       </p>
+
+      {/* ── Auth Modal ── */}
+      {authMode && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm" onClick={() => setAuthMode(null)}>
+          <div className="bg-white rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.12)] p-8 w-full max-w-sm mx-4" onClick={e => e.stopPropagation()}>
+            <h2 className="text-xl font-bold text-slate-900 mb-6">{authMode === 'login' ? '登录' : '注册'}</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">用户名</label>
+                <input value={authForm.username} onChange={e => setAuthForm({...authForm, username: e.target.value})}
+                  className="w-full px-4 py-3 bg-slate-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#3A7BFF]/30" placeholder="输入用户名" />
+              </div>
+              {authMode === 'register' && (
+                <div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1">邮箱</label>
+                  <input value={authForm.email} onChange={e => setAuthForm({...authForm, email: e.target.value})}
+                    className="w-full px-4 py-3 bg-slate-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#3A7BFF]/30" placeholder="your@email.com" />
+                </div>
+              )}
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">密码</label>
+                <input type="password" value={authForm.password} onChange={e => setAuthForm({...authForm, password: e.target.value})}
+                  onKeyDown={e => e.key === 'Enter' && handleAuth()}
+                  className="w-full px-4 py-3 bg-slate-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#3A7BFF]/30" placeholder="输入密码" />
+              </div>
+              {authError && <p className="text-xs text-red-500">{authError}</p>}
+              <button onClick={handleAuth}
+                className="w-full py-3 bg-[#3A7BFF] text-white rounded-full font-semibold hover:bg-[#2B6AE8] transition-all">
+                {authMode === 'login' ? '登录' : '注册'}
+              </button>
+              <p className="text-center text-xs text-slate-400">
+                {authMode === 'login' ? '没有账号？' : '已有账号？'}
+                <button onClick={() => { setAuthMode(authMode === 'login' ? 'register' : 'login'); setAuthError(''); }}
+                  className="text-[#3A7BFF] font-medium ml-1"> {authMode === 'login' ? '注册' : '登录'}</button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
     </div>
   );
