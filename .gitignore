@@ -32,3 +32,5 @@ CLAUDE.md
 postgres_data/
 minio_data/
 
+#doc
+interview-reference.md

@@ -14,10 +14,25 @@ import javax.sql.DataSource;
 public class CorsConfig {
 
     @Bean
-    HealthKnowledgeBase healthKnowledgeBase(@Autowired DataSource dataSource) {
+    HealthKnowledgeBase healthKnowledgeBase(@Autowired DataSource dataSource,
+                                             @Autowired(required = false) app.healthplus.api.service.EmbeddingService embeddingService) {
         var jdbc = new org.springframework.jdbc.core.JdbcTemplate(dataSource);
         List<HealthKnowledgeBase.Entry> entries = loadKnowledgeEntries(jdbc);
-        return new HealthKnowledgeBase(entries);
+        HealthKnowledgeBase kb = new HealthKnowledgeBase(entries);
+
+        if (embeddingService != null) {
+            try {
+                kb.setVectorSearch(embedding -> {
+                    String vecStr = app.healthplus.api.service.EmbeddingService.toPgVector(embedding);
+                    return jdbc.query(
+                        "SELECT id, category, title, content FROM health_knowledge WHERE embedding IS NOT NULL ORDER BY embedding <=> ?::vector LIMIT 10",
+                        (rs, i) -> new HealthKnowledgeBase.Entry(rs.getString("id"), rs.getString("category"), rs.getString("title"), rs.getString("content"), List.of()),
+                        vecStr);
+                });
+                System.out.println("[HealthKnowledgeBase] pgvector search enabled");
+            } catch (Exception e) { System.out.println("[HealthKnowledgeBase] pgvector unavailable: " + e.getMessage()); }
+        }
+        return kb;
     }
 
     private List<HealthKnowledgeBase.Entry> loadKnowledgeEntries(
