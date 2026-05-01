@@ -151,7 +151,10 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 - **COPY 命令**：PostgreSQL 独有的高性能批量导入，parse-worker 直接将百万级 Record 通过 `CopyManager.copyIn()` 写入，避免逐行 INSERT 的性能开销（实测提升 20-50x）
 - **JSONB**：`health_records.raw_payload_json` 使用 JSONB 存储原始 XML 属性，支持按 sourceName 等字段直接查询
 - **窗口函数**：`aggregation-worker` 使用 `avg(d.value_avg) OVER (PARTITION BY ... ROWS BETWEEN 30 PRECEDING AND 1 PRECEDING)` 计算 30 天滚动基线，配合 `lag()` 计算 7 天/30 天趋势增量
-- **Flyway 迁移**：版本化管理 DDL，从 `V1__init_schema.sql` 到 `V5__health_knowledge.sql`
+- **Flyway 迁移**：版本化管理 DDL，V1~V7 覆盖完整 schema 演进
+  - V5: `health_knowledge` 知识库（85 条, 12 类别）
+  - V6: `users` 用户表（UUID PK, BCrypt 密码, 角色）
+  - V7: pgvector 扩展 + `embedding vector(1024)` 列 + IVFFlat 索引 + cosine 相似度函数
 
 ### 4.4 Redis 7
 
@@ -166,6 +169,9 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 **关键技术细节**：
 - 对话历史使用 List 结构存储，配合 `LTRIM` 维持滑动窗口（最近 20 轮）
 - 超出窗口的历史通过 `ConversationMemory` 自动生成摘要注入上下文，平衡 token 消耗与对话连贯性
+- **开发环境端口 16379**（Windows Hyper-V 占用 6379），通过 `docker-compose.dev.yml` 映射
+- **缓存配置**：`CacheConfig` 使用 `@Profile("redis-cache")` 启用，dev 环境默认关闭避免序列化问题
+- **差异化 TTL**：insight 24h / metrics 10min / overview 5min，防穿透/击穿/雪崩
 
 ### 4.5 MinIO
 
@@ -233,14 +239,53 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 - Spring AI 的 `ChatClient` 通过配置 `spring.ai.openai.base-url` 指向 DeepSeek API，实现 API 兼容（DeepSeek 兼容 OpenAI 格式）
 - 使用 DeepSeek 而非 GPT-4 的原因：中文医疗健康场景表现优秀，API 价格仅为 GPT-4 的 1/10
 
-### 6.2 RAG 知识库
+### 6.2 RAG 知识库（pgvector 向量检索）
 
 **选型理由**：通用大模型缺乏运动医学和健康指标的领域知识，需要通过检索增强生成补充。
 
+**知识库规模**：85 条专业健康知识，覆盖 12 个类别：
+
+| 类别 | 条数 | 涵盖内容 |
+|------|------|----------|
+| 睡眠 | 8 | 时长/周期/深度睡眠/HRV/失眠/午睡/昼夜节律/免疫 |
+| 心脏 | 8 | 静息心率/HRV/运动心率/血氧/ECG房颤/血压/胆固醇 |
+| 运动 | 10 | 步数/WHO建议/VO2max/恢复/心率区间/力量/柔韧性/跑步/游泳/高原 |
+| 身体测量 | 8 | BMI/体脂/体重波动/腰围/去脂体重/骨密度/水分率/代谢年龄 |
+| 生命体征 | 6 | 呼吸/血压/体温/血糖/心率恢复/双乘积 |
+| 营养 | 7 | 水分/能量/蛋白质/碳水/脂肪/微量元素/咖啡因 |
+| 心理健康 | 6 | 压力/运动心理/正念/睡眠心理/HRV心理/社交 |
+| 恢复 | 4 | 恢复策略/冷热疗法/HRV指导训练/酒精影响 |
+| 女性健康 | 4 | 月经周期/基础体温/心率特点/更年期 |
+| 健康长寿 | 5 | 步速/肌少症/握力/认知衰退/VO2max长寿 |
+| 环境 | 4 | 噪音/日照/空气质量/温湿度 |
+| 慢病管理 | 6 | 运动处方/代谢综合征/糖尿病/冠心病/高血压/骨关节炎 |
+
+**向量检索架构（pgvector + EmbeddingService）**：
+
+```
+用户提问 → EmbeddingService.embed(text)
+             │
+             │ 调用 DeepSeek text-embedding-3-small API
+             │ 返回 1024 维 float[] 向量
+             ▼
+         pgvector 余弦相似度查询
+             │
+             │ SELECT ... FROM health_knowledge
+             │ WHERE embedding IS NOT NULL
+             │ ORDER BY embedding <=> ?::vector LIMIT 10
+             ▼
+         HealthKnowledgeBase.retrieve()
+             │
+             ├── 向量检索可用 → 返回 Top-K 结果
+             └── 向量检索不可用 → 降级为关键词匹配
+```
+
 **关键技术细节**：
-- `health_knowledge` 表存储领域知识条目：`category / title / content / keywords`
-- 用户提问时，通过关键词匹配检索 Top-3 相关知识条目，注入 system prompt 作为专业参考
-- 知识内容涵盖心率、HRV、睡眠、最大摄氧量、步态等 20+ 指标的健康范围和医学解释
+- `EmbeddingService` 调用 DeepSeek text-embedding-3-small API，生成 1024 维向量
+- `health_knowledge` 表新增 `embedding vector(1024)` 列（V7 迁移），IVFFlat 索引加速余弦相似度
+- `HealthKnowledgeBase` 支持双模式检索：向量优先 → 关键词降级
+- `CorsConfig` 中注册 `setVectorSearch()` 回调，将 JDBC pgvector 查询注入知识库
+- 关键词匹配作为降级方案：当 embedding 未生成或 pgvector 不可用时自动切换
 
 ### 6.3 对话记忆系统
 
@@ -283,7 +328,10 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 **白名单端点**（无需认证）：
 - `POST /api/v1/auth/**` — 注册/登录
 - `POST /api/v1/uploads` — 文件上传（multipart）
+- `GET /api/v1/uploads/**` — 上传状态轮询
 - `POST /api/v1/demo` — 示例数据
+- `GET /api/v1/reports/**` — 报告查询（GET）
+- `GET/POST /api/v1/chat/**` — AI 对话
 - `GET /actuator/health` — 健康检查
 
 **异常处理**：

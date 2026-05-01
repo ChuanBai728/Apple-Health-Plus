@@ -50,7 +50,8 @@
 
 ###  AI 智能分析
 - 周报/月报自动生成 + 数据高亮 + 关键发现
-- DeepSeek 多轮健康对话 + RAG 知识库增强
+- DeepSeek 多轮健康对话 + **pgvector 向量 RAG**（85 条知识库 / 12 类别）
+- EmbeddingService 调用 text-embedding-3-small 生成 1024 维向量，余弦相似度检索
 - 健康状态自动分类（高压疲劳 / 高效恢复 / 运动爆发 / 平稳日常）
 - Redis 缓存加速（24h 报告 / 10min 指标）
 
@@ -117,8 +118,9 @@ cd frontend && npm install && npm run dev
                           ▼          ▼          ▼
                     ┌──────────┐ ┌───────┐ ┌──────────┐
                     │PostgreSQL│ │Redis 7│ │ RabbitMQ │
-                    │   16     │ │缓存/  │ │  异步    │
+                    │16+pgvector│ │缓存/  │ │  异步    │
                     │ 健康数据 │ │会话   │ │  解耦    │
+                    │ 向量索引 │ │       │ │          │
                     └──────────┘ └───────┘ └────┬─────┘
                           ▲                     │
               ┌───────────┴───────────┐  ┌──────┴──────┐
@@ -149,7 +151,7 @@ export.zip → parse-worker → health_records (COPY 批量写入)
 ├── backend-api/
 │   ├── controller/        # REST 端点（Reports / Uploads / Chat / Auth）
 │   ├── security/          # JWT Token Provider · Auth Filter · SecurityConfig
-│   ├── service/           # 业务逻辑（Report · Auth · Chat · Upload）
+│   ├── service/           # 业务逻辑（Report · Auth · Chat · Embedding · Upload）
 │   ├── config/            # CacheConfig (Redis TTL) · Cors · ExceptionHandler
 │   └── repository/        # JPA Repository（User · Upload · Chat）
 ├── parse-worker/
@@ -159,7 +161,7 @@ export.zip → parse-worker → health_records (COPY 批量写入)
 ├── aggregation-worker/    # 聚合 Worker — 日/周/月聚合 + 基线/趋势/异常
 ├── shared-domain/         # JPA 实体（User · Upload · Chat）· DTO · 枚举
 ├── shared-messaging/      # RabbitMQ 消息契约
-├── shared-ai/             # AI 知识库 · 意图分类
+├── shared-ai/             # AI 知识库 (pgvector 向量检索) · 意图分类
 ├── shared-storage/        # 存储抽象 (LocalFile / MinIO S3)
 ├── frontend/              # Next.js 16 + Tailwind v4 + Recharts
 │   └── src/app/
@@ -187,10 +189,10 @@ export.zip → parse-worker → health_records (COPY 批量写入)
 | **安全认证** | Spring Security + JJWT | JWT 无状态认证 · BCrypt 密码 · RBAC |
 | **XML 解析** | Aalto StAX + Virtual Threads | Producer-Consumer 环形缓冲区，2GB 不 OOM |
 | **消息队列** | RabbitMQ 3 | 异步解耦解析/聚合/AI 三阶段管道 |
-| **数据库** | PostgreSQL 16 | JSONB + COPY + 窗口函数（rolling baseline） |
+| **数据库** | PostgreSQL 16 + pgvector | JSONB + COPY + 窗口函数 + 向量相似度检索 |
 | **缓存** | Redis 7 + Spring Cache | 24h 报告 / 10min 指标 / 防穿透/击穿 |
 | **存储** | MinIO | S3 兼容，本地部署 |
-| **AI** | DeepSeek + Spring AI | 中文医疗健康场景强，API 兼容 OpenAI |
+| **AI** | DeepSeek + Spring AI + pgvector | 中文医疗健康场景强，85 条知识库向量 RAG |
 
 ---
 

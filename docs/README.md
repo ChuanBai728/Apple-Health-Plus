@@ -20,12 +20,13 @@ Apple Health+ 是一款面向个人用户的 Apple 健康数据智能分析 Web 
 
 | 层 | 技术 |
 |---|---|
-| 前端 | Next.js 16 + TypeScript + Tailwind CSS + Recharts |
-| 后端 | Spring Boot 3.4 + Maven 多模块 |
-| 数据库 | PostgreSQL 16 (端口 15432) |
+| 前端 | Next.js 16 + TypeScript + Tailwind CSS v4 + Recharts |
+| 后端 | Spring Boot 3.4 + Maven 多模块 + Java 21 虚拟线程 |
+| 安全 | Spring Security + JJWT 0.12.6 (JWT 无状态认证) |
+| 数据库 | PostgreSQL 16 + pgvector (端口 15432) |
 | 消息队列 | RabbitMQ 3 |
-| 缓存 | Redis 7 |
-| AI | Spring AI + DeepSeek (RAG 知识库) |
+| 缓存 | Redis 7 (dev 端口 16379) |
+| AI | Spring AI + DeepSeek (pgvector 向量 RAG, 85 条知识库) |
 | 存储 | MinIO (本地 S3 兼容) / LocalStorage |
 
 ### 模块结构
@@ -76,7 +77,7 @@ cd frontend && npm install && npm run dev
 | 前端 | 3000 |
 | PostgreSQL | 15432 |
 | RabbitMQ | 5672 / 15672 |
-| Redis | 6379 |
+| Redis | 16379 (dev) |
 | MinIO | 9000 / 9001 |
 
 ---
@@ -120,16 +121,29 @@ ChatController → ChatService → DeepSeek API (Spring AI)
 
 | 表 | 说明 |
 |---|---|
+| `users` | 用户账号 (UUID, BCrypt 密码, 角色) |
 | `uploads` | 上传任务信息 |
 | `parse_jobs` | 解析任务追踪 |
 | `health_records` | 原始解析记录 (200万+条/次) |
-| `health_metric_daily` | 每日聚合指标 |
+| `health_metric_daily` | 每日聚合指标 (含基线/趋势/异常) |
 | `health_metric_weekly` | 每周聚合指标 |
 | `health_metric_monthly` | 每月聚合指标 |
 | `health_report_summaries` | AI 自动健康总结 |
 | `chat_sessions` | 聊天会话 |
 | `chat_messages` | 聊天消息 |
-| `health_knowledge` | AI 知识库 (RAG) |
+| `health_knowledge` | AI 知识库 (85 条, 12 类别, 含 pgvector embedding 向量) |
+
+### Flyway 迁移
+
+| 版本 | 内容 |
+|---|---|
+| V1 | 基础表结构 (uploads, parse_jobs, health_records, metric 表) |
+| V2 | chat_sessions / chat_messages |
+| V3 | health_report_summaries |
+| V4 | 索引优化 |
+| V5 | health_knowledge 知识库 (85 条, 12 类别) |
+| V6 | users 用户表 (UUID, BCrypt, 角色) |
+| V7 | pgvector 扩展 + embedding 向量列 + IVFFlat 索引 |
 
 ### health_records 表结构
 
@@ -154,6 +168,8 @@ ChatController → ChatService → DeepSeek API (Spring AI)
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
+| POST | `/api/v1/auth/register` | 用户注册 (username, email, password) |
+| POST | `/api/v1/auth/login` | 用户登录 → 返回 JWT Token |
 | POST | `/api/v1/uploads` | 上传 ZIP (multipart) |
 | POST | `/api/v1/uploads/local` | 本地路径上传 |
 | POST | `/api/v1/uploads/{id}/complete` | 完成上传，触发解析 |
