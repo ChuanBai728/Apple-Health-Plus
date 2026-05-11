@@ -10,10 +10,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
+/**
+ * 本地文件系统存储服务实现。
+ * <p>将文件存储在本地磁盘目录中，适用于开发环境和单机部署场景。
+ * 通过 {@code app.storage.type=local} 配置激活（默认实现）。</p>
+ *
+ * <p>存储根目录通过 {@code app.storage.root} 配置，默认为 {@code ./local-storage}。</p>
+ *
+ * @see StorageService
+ * @see S3StorageService
+ */
 @Service
 @ConditionalOnProperty(name = "app.storage.type", havingValue = "local", matchIfMissing = true)
 public class LocalStorageService implements StorageService {
 
+    /** 本地存储根目录的绝对路径 */
     private final Path storageRoot;
 
     public LocalStorageService(@Value("${app.storage.root:./local-storage}") String storageRoot) {
