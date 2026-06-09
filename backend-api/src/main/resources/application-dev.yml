@@ -4,6 +4,8 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: healthplus
     password: healthplus
+  flyway:
+    validate-on-migrate: false
   rabbitmq:
     host: localhost
     port: 5672

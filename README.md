@@ -27,6 +27,21 @@
 
 ---
 
+## 效果预览
+
+<table>
+<tr>
+<td align="center"><b>首页 — 双列布局上传</b></td>
+<td align="center"><b>数据仪表盘 — 三栏布局</b></td>
+</tr>
+<tr>
+<td><img src="首页.png" width="100%"></td>
+<td><img src="数据页.png" width="100%"></td>
+</tr>
+</table>
+
+---
+
 ## 功能特性
 
 <table>
@@ -102,6 +117,22 @@ cd frontend && npm install && npm run dev
 ```
 
 打开 **http://localhost:3000** 即可使用。
+
+### 环境变量
+
+| 变量 | 说明 | 必填 |
+|------|------|------|
+| `DEEPSEEK_API_KEY` | DeepSeek API 密钥（AI 对话和向量嵌入） | ✅ |
+
+```bash
+# Linux / macOS
+export DEEPSEEK_API_KEY=sk-xxxxxxxxxxxxxxxx
+
+# Windows PowerShell
+$env:DEEPSEEK_API_KEY="sk-xxxxxxxxxxxxxxxx"
+```
+
+未设置时 AI 对话功能不可用，其他功能（上传、解析、聚合、可视化）正常运行。
 
 ---
 

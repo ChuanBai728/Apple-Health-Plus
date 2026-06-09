@@ -26,7 +26,7 @@ spring:
     password: guest
   ai:
     openai:
-      api-key: ${DEEPSEEK_API_KEY:sk-827de10d100d4975bff6be873024b4d7}
+      api-key: ${DEEPSEEK_API_KEY:your-api-key-here}
       base-url: https://api.deepseek.com
       chat:
         options:
