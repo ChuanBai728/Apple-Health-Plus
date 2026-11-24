@@ -1,0 +1,193 @@
+:root {
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'PingFang SC',
+    'Hiragino Sans GB', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  --radius: 22px;
+  --radius-sm: 14px;
+  --header-h: 64px;
+}
+
+/* ---------- 夜航 aurora ---------- */
+[data-skin='aurora'] {
+  color-scheme: dark;
+  --bg-top: #0a0f1d;
+  --bg-mid: #070a14;
+  --bg-low: #05070e;
+  --orb-a: rgb(56 132 255 / 0.5);
+  --orb-b: rgb(139 92 246 / 0.42);
+  --orb-c: rgb(14 165 233 / 0.32);
+  --orb-d: rgb(236 72 153 / 0.2);
+  --text: #f7f8fb;
+  --muted: rgba(255, 255, 255, 0.68);
+  --faint: rgba(255, 255, 255, 0.44);
+  --hair: rgba(255, 255, 255, 0.12);
+  --hair-strong: rgba(255, 255, 255, 0.24);
+  --glass-a: rgba(255, 255, 255, 0.1);
+  --glass-b: rgba(255, 255, 255, 0.035);
+  --card-solid: #141a30;
+  --accent-1: #7dd3fc;
+  --accent-2: #a5b4fc;
+  --accent-3: #f0abfc;
+  --accent-ink: #0d1328;
+  --glow: rgba(165, 180, 252, 0.45);
+  --good: #86efac;
+  --warn: #fcd34d;
+  --danger: #fb7185;
+  --privacy-ink: #d9f99d;
+  --privacy-bg: rgba(134, 239, 172, 0.08);
+  --privacy-border: rgba(134, 239, 172, 0.22);
+}
+
+/* ---------- 环彩 rings ---------- */
+[data-skin='rings'] {
+  color-scheme: dark;
+  --bg-top: #140811;
+  --bg-mid: #0c040b;
+  --bg-low: #070308;
+  --orb-a: rgb(255 55 95 / 0.34);
+  --orb-b: rgb(168 240 42 / 0.2);
+  --orb-c: rgb(0 229 255 / 0.22);
+  --orb-d: rgb(255 55 95 / 0.14);
+  --text: #fdf6f8;
+  --muted: rgba(255, 240, 245, 0.66);
+  --faint: rgba(255, 240, 245, 0.42);
+  --hair: rgba(255, 235, 240, 0.13);
+  --hair-strong: rgba(255, 235, 240, 0.26);
+  --glass-a: rgba(255, 235, 240, 0.09);
+  --glass-b: rgba(255, 235, 240, 0.03);
+  --card-solid: #1c0e17;
+  --accent-1: #ff375f;
+  --accent-2: #a8f02a;
+  --accent-3: #00e5ff;
+  --accent-ink: #16060d;
+  --glow: rgba(255, 55, 95, 0.42);
+  --good: #a8f02a;
+  --warn: #ffd60a;
+  --danger: #ff375f;
+  --privacy-ink: #d3f7a1;
+  --privacy-bg: rgba(168, 240, 42, 0.08);
+  --privacy-border: rgba(168, 240, 42, 0.24);
+}
+
+/* ---------- 落日 sunset ---------- */
+[data-skin='sunset'] {
+  color-scheme: dark;
+  --bg-top: #22091f;
+  --bg-mid: #150618;
+  --bg-low: #0d0512;
+  --orb-a: rgb(255 140 66 / 0.4);
+  --orb-b: rgb(255 80 120 / 0.34);
+  --orb-c: rgb(190 60 200 / 0.26);
+  --orb-d: rgb(255 200 90 / 0.18);
+  --text: #fff6ef;
+  --muted: rgba(255, 240, 230, 0.68);
+  --faint: rgba(255, 240, 230, 0.42);
+  --hair: rgba(255, 236, 220, 0.14);
+  --hair-strong: rgba(255, 236, 220, 0.28);
+  --glass-a: rgba(255, 236, 220, 0.1);
+  --glass-b: rgba(255, 236, 220, 0.035);
+  --card-solid: #241021;
+  --accent-1: #ffb347;
+  --accent-2: #ff6b6b;
+  --accent-3: #ff8fab;
+  --accent-ink: #241005;
+  --glow: rgba(255, 179, 71, 0.45);
+  --good: #a7f3d0;
+  --warn: #ffb347;
+  --danger: #ff6b6b;
+  --privacy-ink: #ffe1a8;
+  --privacy-bg: rgba(255, 179, 71, 0.09);
+  --privacy-border: rgba(255, 179, 71, 0.26);
+}
+
+/* ---------- 苔原 moss ---------- */
+[data-skin='moss'] {
+  color-scheme: dark;
+  --bg-top: #0c1a11;
+  --bg-mid: #081209;
+  --bg-low: #050d08;
+  --orb-a: rgb(163 230 53 / 0.26);
+  --orb-b: rgb(52 211 153 / 0.28);
+  --orb-c: rgb(251 191 36 / 0.16);
+  --orb-d: rgb(20 180 120 / 0.2);
+  --text: #f3f8ef;
+  --muted: rgba(238, 248, 235, 0.66);
+  --faint: rgba(238, 248, 235, 0.42);
+  --hair: rgba(238, 248, 235, 0.13);
+  --hair-strong: rgba(238, 248, 235, 0.26);
+  --glass-a: rgba(238, 248, 235, 0.09);
+  --glass-b: rgba(238, 248, 235, 0.03);
+  --card-solid: #12211a;
+  --accent-1: #a3e635;
+  --accent-2: #34d399;
+  --accent-3: #fbbf24;
+  --accent-ink: #0a1608;
+  --glow: rgba(163, 230, 53, 0.4);
+  --good: #a3e635;
+  --warn: #fbbf24;
+  --danger: #fb7185;
+  --privacy-ink: #d9f99d;
+  --privacy-bg: rgba(163, 230, 53, 0.08);
+  --privacy-border: rgba(163, 230, 53, 0.24);
+}
+
+/* ---------- 晨纸 paper ---------- */
+[data-skin='paper'] {
+  color-scheme: light;
+  --bg-top: #fbf7ef;
+  --bg-mid: #f6f0e2;
+  --bg-low: #efe7d4;
+  --orb-a: rgb(228 120 80 / 0.24);
+  --orb-b: rgb(20 150 130 / 0.18);
+  --orb-c: rgb(220 170 60 / 0.22);
+  --orb-d: rgb(200 90 140 / 0.12);
+  --text: #23211b;
+  --muted: rgba(35, 33, 27, 0.66);
+  --faint: rgba(35, 33, 27, 0.44);
+  --hair: rgba(35, 33, 27, 0.13);
+  --hair-strong: rgba(35, 33, 27, 0.28);
+  --glass-a: rgba(255, 255, 255, 0.72);
+  --glass-b: rgba(255, 255, 255, 0.4);
+  --card-solid: #fffdf7;
+  --accent-1: #d4472a;
+  --accent-2: #0e7a6d;
+  --accent-3: #b98a1f;
+  --accent-ink: #fff8ee;
+  --glow: rgba(212, 71, 42, 0.25);
+  --good: #15803d;
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --privacy-ink: #14532d;
+  --privacy-bg: rgba(21, 128, 61, 0.08);
+  --privacy-border: rgba(21, 128, 61, 0.25);
+}
+
+/* ---------- 青花 tide ---------- */
+[data-skin='tide'] {
+  color-scheme: light;
+  --bg-top: #f3f7fc;
+  --bg-mid: #eaf0f8;
+  --bg-low: #dde7f3;
+  --orb-a: rgb(29 78 216 / 0.18);
+  --orb-b: rgb(8 145 178 / 0.18);
+  --orb-c: rgb(219 39 119 / 0.12);
+  --orb-d: rgb(60 130 246 / 0.14);
+  --text: #16233a;
+  --muted: rgba(22, 35, 58, 0.66);
+  --faint: rgba(22, 35, 58, 0.44);
+  --hair: rgba(22, 35, 58, 0.13);
+  --hair-strong: rgba(22, 35, 58, 0.28);
+  --glass-a: rgba(255, 255, 255, 0.75);
+  --glass-b: rgba(255, 255, 255, 0.42);
+  --card-solid: #ffffff;
+  --accent-1: #1d4ed8;
+  --accent-2: #0891b2;
+  --accent-3: #db2777;
+  --accent-ink: #f0f6ff;
+  --glow: rgba(29, 78, 216, 0.25);
+  --good: #15803d;
+  --warn: #b45309;
+  --danger: #b91c1c;
+  --privacy-ink: #14532d;
+  --privacy-bg: rgba(21, 128, 61, 0.08);
+  --privacy-border: rgba(21, 128, 61, 0.25);
+}
