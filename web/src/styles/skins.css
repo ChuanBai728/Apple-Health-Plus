@@ -4,6 +4,9 @@
   --radius: 22px;
   --radius-sm: 14px;
   --header-h: 64px;
+  --shadow-soft: 0 24px 60px -30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-card: 0 20px 50px -34px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --shadow-pop: 0 30px 70px -20px rgba(0, 0, 0, 0.6);
 }
 
 /* ---------- 夜航 aurora ---------- */
@@ -133,32 +136,35 @@
 /* ---------- 晨纸 paper ---------- */
 [data-skin='paper'] {
   color-scheme: light;
-  --bg-top: #fbf7ef;
-  --bg-mid: #f6f0e2;
-  --bg-low: #efe7d4;
-  --orb-a: rgb(228 120 80 / 0.24);
+  --bg-top: #fdfaf4;
+  --bg-mid: #f7f1e5;
+  --bg-low: #efe7d5;
+  --orb-a: rgb(228 120 80 / 0.26);
   --orb-b: rgb(20 150 130 / 0.18);
-  --orb-c: rgb(220 170 60 / 0.22);
+  --orb-c: rgb(220 170 60 / 0.24);
   --orb-d: rgb(200 90 140 / 0.12);
-  --text: #23211b;
-  --muted: rgba(35, 33, 27, 0.66);
-  --faint: rgba(35, 33, 27, 0.44);
-  --hair: rgba(35, 33, 27, 0.13);
-  --hair-strong: rgba(35, 33, 27, 0.28);
-  --glass-a: rgba(255, 255, 255, 0.72);
-  --glass-b: rgba(255, 255, 255, 0.4);
+  --text: #241f16;
+  --muted: rgba(36, 31, 22, 0.68);
+  --faint: rgba(36, 31, 22, 0.46);
+  --hair: rgba(60, 48, 28, 0.12);
+  --hair-strong: rgba(60, 48, 28, 0.26);
+  --glass-a: rgba(255, 255, 255, 0.78);
+  --glass-b: rgba(255, 253, 246, 0.55);
   --card-solid: #fffdf7;
   --accent-1: #d4472a;
   --accent-2: #0e7a6d;
   --accent-3: #b98a1f;
   --accent-ink: #fff8ee;
-  --glow: rgba(212, 71, 42, 0.25);
+  --glow: rgba(212, 71, 42, 0.22);
   --good: #15803d;
   --warn: #b45309;
   --danger: #b91c1c;
   --privacy-ink: #14532d;
   --privacy-bg: rgba(21, 128, 61, 0.08);
   --privacy-border: rgba(21, 128, 61, 0.25);
+  --shadow-soft: 0 22px 48px -30px rgba(84, 64, 32, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-card: 0 16px 40px -30px rgba(84, 64, 32, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-pop: 0 26px 60px -24px rgba(84, 64, 32, 0.3);
 }
 
 /* ---------- 青花 tide ---------- */
@@ -179,6 +185,9 @@
   --glass-a: rgba(255, 255, 255, 0.75);
   --glass-b: rgba(255, 255, 255, 0.42);
   --card-solid: #ffffff;
+  --shadow-soft: 0 22px 48px -30px rgba(28, 52, 92, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-card: 0 16px 40px -30px rgba(28, 52, 92, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  --shadow-pop: 0 26px 60px -24px rgba(28, 52, 92, 0.28);
   --accent-1: #1d4ed8;
   --accent-2: #0891b2;
   --accent-3: #db2777;

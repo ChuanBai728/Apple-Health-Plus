@@ -25,6 +25,7 @@ function share() {
         { label: '静息心率记录', value: `${fmtInt(m.heart.resting.days)} 天` },
         { label: 'HRV 均值', value: m.heart.hrv.days ? `${fmtInt(m.heart.hrv.avg)} 毫秒` : '—' },
         { label: 'HRV 记录', value: `${fmtInt(m.heart.hrv.days)} 天` },
+        { label: '心率区间', value: m.heart.resting.min && m.heart.resting.max ? `${fmtInt(m.heart.resting.min.value)} – ${fmtInt(m.heart.resting.max.value)} 次/分` : '—' },
       ],
       copy: m.copy.heart,
     },

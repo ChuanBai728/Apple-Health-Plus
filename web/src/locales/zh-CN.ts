@@ -48,6 +48,11 @@ export const zhCN = {
     restart: '换个文件',
     ignored: (n: number) => `已忽略 ${n} 条异常记录`,
     empty: '这段时间没有相关记录。',
+    kicker: '年度身体报告',
+    periodLabel: '统计区间',
+    personaChip: '这一年的你',
+    localChip: '浏览器本地解析 · 不上传',
+    sourceChip: (name: string) => `${name} · 本地解析`,
   },
   modules: {
     persona: '年度人格',

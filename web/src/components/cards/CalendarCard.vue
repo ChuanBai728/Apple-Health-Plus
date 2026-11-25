@@ -29,6 +29,8 @@ function share() {
         { label: '最热闹的一周', value: m.calendar.bestWeek ? `${fmtInt(m.calendar.bestWeek.total)} 步` : '—' },
         { label: '走得最多的', value: '周' + WD[m.calendar.topWeekday] },
         { label: '日均最高的月', value: m.calendar.busiestMonth ? `${Number(m.calendar.busiestMonth.month.slice(5))} 月` : '—' },
+        { label: '有记录的天数', value: `${fmtInt(m.calendar.recordedDays)} / ${fmtInt(m.calendar.totalDays)} 天` },
+        { label: '记录覆盖率', value: `${fmtInt(Math.round((m.calendar.recordedDays / m.calendar.totalDays) * 100))}%` },
       ],
       copy: m.copy.calendar,
     },

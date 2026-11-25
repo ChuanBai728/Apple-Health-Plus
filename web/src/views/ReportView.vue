@@ -41,23 +41,36 @@ function openShare(s: { payload: Omit<SharePayload, 'chart'>; getChart?: () => s
   <main v-if="model" class="report-page container">
     <div class="report-top">
       <div class="report-head">
+        <span class="report-kicker"><i class="k-dot" />{{ zhCN.report.kicker }}</span>
         <h1>身体年报</h1>
-        <span class="file-name">
-          {{ dateCNFull(model.period.from) }} – {{ dateCNFull(model.period.to) }} ·
-          <template v-if="report.isDemo">示例数据，走与真实导出相同的解析管线</template>
-          <template v-else>{{ report.fileName }} · 本地解析</template>
-        </span>
+        <div class="report-meta">
+          <span class="meta-chip">
+            <Icon name="file" :size="13" />
+            {{ dateCNFull(model.period.from) }} – {{ dateCNFull(model.period.to) }}
+          </span>
+          <span class="meta-chip meta-persona">
+            <Icon name="spark" :size="13" />
+            {{ zhCN.report.personaChip }} · {{ model.persona.name }}
+          </span>
+          <span class="meta-chip meta-local">
+            <Icon name="shield" :size="13" />
+            {{ report.isDemo ? zhCN.report.localChip : zhCN.report.sourceChip(report.fileName) }}
+          </span>
+        </div>
       </div>
-      <PeriodSwitch :periods="model.periods" :current="model.period.key" @change="report.setPeriod($event)" />
+      <div class="report-period">
+        <span class="period-label">{{ zhCN.report.periodLabel }}</span>
+        <PeriodSwitch :periods="model.periods" :current="model.period.key" @change="report.setPeriod($event)" />
+      </div>
     </div>
 
     <OverviewBand :model="model" />
 
-    <div v-if="model.coverageNotice" class="notice">
+    <div v-if="model.coverageNotice" class="notice notice-info">
       <Icon name="info" :size="15" />
       <span>{{ model.coverageNotice }}</span>
     </div>
-    <div v-if="model.ignored > 0" class="notice">
+    <div v-if="model.ignored > 0" class="notice notice-alert">
       <Icon name="alert" :size="15" />
       <span>{{ zhCN.report.ignored(model.ignored) }}{{ model.warnings.length ? '：' + model.warnings.join('；') : '' }}</span>
     </div>

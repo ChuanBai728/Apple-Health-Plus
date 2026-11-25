@@ -14,9 +14,30 @@ const chart = ref<InstanceType<typeof StepsLineChart>>()
 
 const ringPct = computed(() => Math.round(props.model.rings.rate * 100))
 
-function arc(r: number, pct: number, color: string) {
+/** 三环都基于有圆环记录的天数，口径一致 */
+const rings = computed(() => {
+  const r = props.model.rings
+  const days = Math.max(1, r.daysWithData)
+  return [
+    { key: 'close', name: '三环全闭合', pct: Math.min(1, r.closedDays / days), c: 'var(--accent-1)' },
+    {
+      key: 'move',
+      name: '运动时长达标',
+      pct: Math.min(1, (r.exerciseHours * 60) / (days * 30)),
+      c: 'var(--accent-2)',
+    },
+    {
+      key: 'stand',
+      name: '站立满 12 小时',
+      pct: Math.min(1, props.model.outdoor.stand12Days / days),
+      c: 'var(--accent-3)',
+    },
+  ]
+})
+
+function arc(r: number, pct: number) {
   const c = 2 * Math.PI * r
-  return { dash: `${c * Math.min(1, pct)} ${c}`, color }
+  return `${c * Math.min(1, Math.max(0, pct))} ${c}`
 }
 
 function share() {
@@ -31,6 +52,8 @@ function share() {
         { label: '约合马拉松', value: `${fmt1(m.steps.marathons)} 个` },
         { label: '总步数', value: `${fmtInt(m.steps.total)} 步` },
         { label: '三环全闭合', value: `${fmtInt(m.rings.closedDays)} 天` },
+        { label: '步数中位数', value: `${fmtInt(m.steps.median)} 步` },
+        { label: '三环闭合率', value: `${fmtInt(m.rings.rate * 100)}%` },
       ],
       copy: m.copy.distance,
     },
@@ -81,19 +104,29 @@ function share() {
 
       <template v-if="model.rings.daysWithData > 0">
         <div class="tile s4 rings-tile">
-          <div class="tile-label">活动圆环<span class="legend">三环全闭合率</span></div>
-          <svg class="rings-svg" width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">
-            <g transform="rotate(-90 75 75)">
-              <circle cx="75" cy="75" r="62" fill="none" stroke="var(--hair)" stroke-width="11" />
-              <circle cx="75" cy="75" r="62" fill="none" stroke="var(--accent-1)" stroke-width="11" stroke-linecap="round" :stroke-dasharray="arc(62, model.rings.rate, '').dash" />
-              <circle cx="75" cy="75" r="46" fill="none" stroke="var(--hair)" stroke-width="11" />
-              <circle cx="75" cy="75" r="46" fill="none" stroke="var(--accent-2)" stroke-width="11" stroke-linecap="round" :stroke-dasharray="arc(46, Math.min(1, (model.rings.exerciseHours * 60) / Math.max(1, model.rings.daysWithData * 30)), '').dash" />
-              <circle cx="75" cy="75" r="30" fill="none" stroke="var(--hair)" stroke-width="11" />
-              <circle cx="75" cy="75" r="30" fill="none" stroke="var(--accent-3)" stroke-width="11" stroke-linecap="round" :stroke-dasharray="arc(30, Math.min(1, model.rings.closedDays / Math.max(1, model.rings.daysWithData)), '').dash" />
-            </g>
-            <text x="75" y="70" text-anchor="middle" fill="var(--text)" font-size="26" font-weight="800">{{ ringPct }}%</text>
-            <text x="75" y="92" text-anchor="middle" fill="var(--faint)" font-size="11">全闭合率</text>
-          </svg>
+          <div class="tile-label">活动圆环<span class="legend">按有记录的天数统计</span></div>
+          <div class="rings-visual">
+            <svg class="rings-svg" width="168" height="168" viewBox="0 0 168 168" aria-hidden="true">
+              <g transform="rotate(-90 84 84)">
+                <circle class="rk-track" cx="84" cy="84" r="72" fill="none" stroke-width="12" />
+                <circle class="rk-bar" cx="84" cy="84" r="72" fill="none" stroke-width="12" stroke-linecap="round" :stroke="rings[0].c" :stroke-dasharray="arc(72, rings[0].pct)" />
+                <circle class="rk-track" cx="84" cy="84" r="54" fill="none" stroke-width="12" />
+                <circle class="rk-bar" cx="84" cy="84" r="54" fill="none" stroke-width="12" stroke-linecap="round" :stroke="rings[1].c" :stroke-dasharray="arc(54, rings[1].pct)" />
+                <circle class="rk-track" cx="84" cy="84" r="36" fill="none" stroke-width="12" />
+                <circle class="rk-bar" cx="84" cy="84" r="36" fill="none" stroke-width="12" stroke-linecap="round" :stroke="rings[2].c" :stroke-dasharray="arc(36, rings[2].pct)" />
+              </g>
+              <circle class="rk-core" cx="84" cy="84" r="30" />
+              <text class="rk-figure" x="84" y="77" text-anchor="middle" dominant-baseline="middle">{{ ringPct }}%</text>
+              <text class="rk-caption" x="84" y="97" text-anchor="middle" dominant-baseline="middle">全闭合率</text>
+            </svg>
+            <ul class="rings-legend">
+              <li v-for="r in rings" :key="r.key">
+                <i :style="{ background: r.c }" />
+                <span>{{ r.name }}</span>
+                <b>{{ Math.round(r.pct * 100) }}%</b>
+              </li>
+            </ul>
+          </div>
         </div>
         <div class="tile s4">
           <div class="tile-label">圆环明细</div>
@@ -118,7 +151,62 @@ function share() {
 .rings-tile .tile-label {
   align-self: stretch;
 }
+.rings-visual {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+}
 .rings-svg {
-  margin: auto 0;
+  flex: none;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.18));
+}
+.rk-track {
+  stroke: color-mix(in srgb, var(--text) 8%, transparent);
+}
+.rk-core {
+  fill: var(--card-solid);
+}
+.rk-figure {
+  fill: var(--text);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.rk-caption {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.rings-legend {
+  list-style: none;
+  display: grid;
+  gap: 9px;
+  width: 100%;
+}
+.rings-legend li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.rings-legend i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow: 0 0 8px currentColor;
+}
+.rings-legend span {
+  flex: 1;
+  min-width: 0;
+}
+.rings-legend b {
+  flex: none;
+  margin-left: 8px;
+  font-weight: 800;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
 }
 </style>

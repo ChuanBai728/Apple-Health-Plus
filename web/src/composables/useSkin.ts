@@ -16,12 +16,30 @@ export const SKINS: Skin[] = [
   { key: 'tide', name: '青花', dots: ['#1d4ed8', '#0891b2', '#db2777'], dark: false },
 ]
 
-const initial = SKINS[Math.floor(Math.random() * SKINS.length)]
+const STORAGE_KEY = 'healthplus:skin'
+const DEFAULT_SKIN = 'paper'
+
+function readStoredSkin(): Skin {
+  const fallback = SKINS.find((s) => s.key === DEFAULT_SKIN) ?? SKINS[0]
+  try {
+    const key = localStorage.getItem(STORAGE_KEY)
+    return SKINS.find((s) => s.key === key) ?? fallback
+  } catch {
+    return fallback
+  }
+}
+
+const initial = readStoredSkin()
 const current = ref<Skin>(initial)
 
 export function applySkin(skin: Skin) {
   current.value = skin
   document.documentElement.dataset.skin = skin.key
+  try {
+    localStorage.setItem(STORAGE_KEY, skin.key)
+  } catch {
+    /* 隐私模式下不可写，忽略 */
+  }
   const meta = document.querySelector('meta[name="theme-color"]')
   if (meta) {
     const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg-low').trim()

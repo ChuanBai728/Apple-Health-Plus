@@ -32,6 +32,8 @@ function share() {
         { label: '平均醒来', value: m.rhythm.nights ? noonMinToClock(m.rhythm.avgWake) : '—' },
         { label: '每晚睡着', value: `${fmt1(m.rhythm.avgAsleepHours)} 小时` },
         { label: '有效小睡', value: `${fmtInt(m.naps.count)} 次` },
+        { label: '入睡波动', value: `${fmtInt(m.rhythm.bedSpreadMin)} 分钟` },
+        { label: '最长小睡', value: m.naps.longest ? `${fmtInt(m.naps.longest.value)} 分钟` : '—' },
       ],
       copy: m.copy.rhythm,
     },

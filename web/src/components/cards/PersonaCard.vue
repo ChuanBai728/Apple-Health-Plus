@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ReportModel } from '@/types/report'
 import type { SharePayload } from '@/composables/useShareImage'
+import { fmtInt } from '@/core/format'
 import ReportCard from '@/components/ReportCard.vue'
 import Icon from '@/components/Icon.vue'
 
@@ -21,7 +22,13 @@ function share() {
       no: '01 / 08',
       title: '年度人格 · ' + m.persona.name,
       periodLabel: m.period.label,
-      stats: m.persona.stats,
+      stats: [
+        ...m.persona.stats,
+        { label: '总步数', value: `${fmtInt(m.steps.total)} 步` },
+        { label: '训练', value: `${fmtInt(m.training.count)} 次` },
+        { label: '三环闭合', value: `${fmtInt(m.rings.closedDays)} 天` },
+      ],
+      tags: m.persona.tags,
       copy: m.copy.persona,
     },
   })

@@ -29,6 +29,8 @@ function share() {
         { label: '约合珠峰', value: `${fmt1(m.stairs.everest)} 倍` },
         { label: '最长连续', value: `${m.stairs.streak1.length} 天` },
         { label: '单日最高', value: m.stairs.maxDay ? `${fmtInt(m.stairs.maxDay.value)} 层` : '—' },
+        { label: '十层连续', value: `${m.stairs.streak10.length} 天` },
+        { label: '有记录的天数', value: `${fmtInt(m.stairs.days.length)} 天` },
       ],
       copy: m.copy.stairs,
     },

@@ -52,6 +52,8 @@ function share() {
         { label: '总时长', value: `${fmt1(m.training.hours)} 小时` },
         { label: '最长连续', value: `${m.training.streak.length} 天` },
         { label: '主要时段', value: m.training.primarySlot },
+        { label: '训练项目', value: `${m.training.groups.length} 种` },
+        { label: '最长单次', value: m.training.longest ? `${fmtInt(m.training.longest.value)} 分钟` : '—' },
       ],
       copy: m.copy.training,
     },

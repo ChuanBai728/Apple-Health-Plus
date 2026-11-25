@@ -29,6 +29,8 @@ function share() {
         { label: '日均日光', value: `${fmtInt(m.outdoor.daylightAvgMin)} 分钟` },
         { label: '日均站立', value: `${fmt1(m.outdoor.standAvgHours)} 小时` },
         { label: '活动能量', value: `${fmtInt(m.outdoor.kcalTotal)} 千卡` },
+        { label: '有日光的天数', value: `${fmtInt(m.outdoor.daylightDays)} 天` },
+        { label: '站立满 12 小时', value: `${fmtInt(m.outdoor.stand12Days)} 天` },
       ],
       copy: m.copy.outdoor,
     },
